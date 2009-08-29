@@ -1,0 +1,8 @@
+^/\*\*$
+^ \* junit-interceptors: JUnit Interceptors Collection$
+^ \*$
+^ \* Copyright \(c\) \d{4} by Alistair A\. Israel\.$
+^ \* This software is made available under the terms of the MIT License\.$
+^ \*$
+^ \* Created [A-Z][a-z]{2} \d{1,2}, \d{4}$
+^ \*/$
