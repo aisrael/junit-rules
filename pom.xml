@@ -7,6 +7,13 @@
   <name>Java Interceptors Library</name>
   <version>0.1-SNAPSHOT</version>
 
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>LICENSE.txt</url>
+    </license>
+  </licenses>
+
   <properties>
     <!-- Use UTF-8 as the default source encoding -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
