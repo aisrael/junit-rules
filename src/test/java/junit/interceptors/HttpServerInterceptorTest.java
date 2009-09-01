@@ -8,17 +8,17 @@
  */
 package junit.interceptors;
 
-import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
+import junit.interceptors.httpserver.SimpleHttpHandler;
+
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
 /**
@@ -41,15 +41,14 @@ public final class HttpServerInterceptorTest {
      */
     @Test
     public void testHttpServerInterceptor() throws Exception {
-        httpServer.addHandler("/", new HttpHandler() {
+        final HttpHandler handler = new SimpleHttpHandler() {
 
             @Override
-            public void handle(final HttpExchange httpExchange) throws IOException {
+            protected void onGet() throws IOException {
                 gotHttpRequest = true;
-                httpExchange.sendResponseHeaders(HTTP_OK, 0);
-                httpExchange.close();
             }
-        });
+        };
+        httpServer.addHandler("/", handler);
         final HttpURLConnection connection = httpServer.get("/");
         assertEquals(HttpURLConnection.HTTP_OK, connection.getResponseCode());
         assertTrue(gotHttpRequest);

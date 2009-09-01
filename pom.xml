@@ -5,7 +5,7 @@
   <groupId>junit-interceptors</groupId>
   <artifactId>junit-interceptors</artifactId>
   <name>Java Interceptors Library</name>
-  <version>0.1</version>
+  <version>0.1.1-SNAPSHOT</version>
 
   <licenses>
     <license>
