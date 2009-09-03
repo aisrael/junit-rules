@@ -51,7 +51,6 @@ public final class JettyInterceptorTest {
             public void handle(final String target, final HttpServletRequest request,
                     final HttpServletResponse response, final int dispatch) throws IOException,
                     ServletException {
-                System.out.println(target);
                 final PrintWriter out = response.getWriter();
                 out.println("<?xml version=\"1.0\"?>");
                 out.println("<resource id=\"1234\" name=\"test\" />");
