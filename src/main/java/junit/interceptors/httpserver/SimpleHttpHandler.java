@@ -122,7 +122,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
      * 
      * @return a {@link PrintWriter}
      */
-    protected final PrintWriter getResponse() {
+    protected final PrintWriter getResponseWriter() {
         return this.pw;
     }
 

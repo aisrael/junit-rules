@@ -41,8 +41,8 @@ public final class HttpServerInterceptorTest {
         httpServer.addHandler("/", new SimpleHttpHandler() {
 
             protected void onGet() throws IOException {
-                getResponse().println("<?xml version=\"1.0\"?>");
-                getResponse().println("<resource id=\"1234\" name=\"test\" />");
+                getResponseWriter().println("<?xml version=\"1.0\"?>");
+                getResponseWriter().println("<resource id=\"1234\" name=\"test\" />");
                 sendResponse(HTTP_OK);
             }
         });
