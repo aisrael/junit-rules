@@ -6,7 +6,7 @@
  *
  * Created Aug 28, 2009
  */
-package junit.interceptors;
+package junit.interceptors.httpserver;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

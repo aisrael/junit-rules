@@ -6,7 +6,7 @@
  *
  * Created Aug 28, 2009
  */
-package junit.interceptors;
+package junit.interceptors.httpserver;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
@@ -15,8 +15,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-
-import junit.interceptors.httpserver.SimpleHttpHandler;
 
 import org.junit.Rule;
 import org.junit.Test;
