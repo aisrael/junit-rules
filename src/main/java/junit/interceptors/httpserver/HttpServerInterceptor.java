@@ -13,16 +13,16 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-import org.junit.rules.ExternalResource;
+import junit.interceptors.TestFixture;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 /**
- * 
+ *
  * @author Alistair A. Israel
  */
-public class HttpServerInterceptor extends ExternalResource {
+public class HttpServerInterceptor extends TestFixture {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -75,25 +75,25 @@ public class HttpServerInterceptor extends ExternalResource {
 
     /**
      * {@inheritDoc}
-     * 
-     * @see org.junit.rules.ExternalResource#before()
+     *
+     * @see junit.interceptors.TestFixture#setUp()
      */
     @Override
-    protected final void before() throws Throwable {
-        super.before();
+    protected final void setUp() throws Throwable {
+        super.setUp();
         httpServer = HttpServer.create(address, 0);
         httpServer.start();
     }
 
     /**
      * {@inheritDoc}
-     * 
-     * @see org.junit.rules.ExternalResource#after()
+     *
+     * @see junit.interceptors.TestFixture#tearDown()
      */
     @Override
-    protected final void after() {
+    protected final void tearDown() throws Throwable {
         httpServer.stop(0);
-        super.after();
+        super.tearDown();
     }
 
     /**
