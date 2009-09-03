@@ -8,10 +8,12 @@
  */
 package junit.interceptors;
 
+import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import junit.interceptors.httpserver.SimpleHttpHandler;
@@ -19,21 +21,18 @@ import junit.interceptors.httpserver.SimpleHttpHandler;
 import org.junit.Rule;
 import org.junit.Test;
 
-import com.sun.net.httpserver.HttpHandler;
-
 /**
  * JUnit test case for {@link HttpServerInterceptor}.
- *
+ * 
  * @author Alistair A. Israel
  */
 public final class HttpServerInterceptorTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public final HttpServerInterceptor httpServer = new HttpServerInterceptor(8080);
-    // CHECKSTYLE:ON
+    public final HttpServerInterceptor httpServer = new HttpServerInterceptor();
 
-    private boolean gotHttpRequest;
+    // CHECKSTYLE:ON
 
     /**
      * @throws Exception
@@ -41,17 +40,19 @@ public final class HttpServerInterceptorTest {
      */
     @Test
     public void testHttpServerInterceptor() throws Exception {
-        final HttpHandler handler = new SimpleHttpHandler() {
+        httpServer.addHandler("/", new SimpleHttpHandler() {
 
-            @Override
             protected void onGet() throws IOException {
-                gotHttpRequest = true;
+                getResponse().println("<?xml version=\"1.0\"?>");
+                getResponse().println("<resource id=\"1234\" name=\"test\" />");
+                sendResponse(HTTP_OK);
             }
-        };
-        httpServer.addHandler("/", handler);
+        });
         final HttpURLConnection connection = httpServer.get("/");
-        assertEquals(HttpURLConnection.HTTP_OK, connection.getResponseCode());
-        assertTrue(gotHttpRequest);
+        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        assertEquals("<?xml version=\"1.0\"?>", in.readLine());
+        assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());
+        assertEquals(HTTP_OK, connection.getResponseCode());
     }
 
 }

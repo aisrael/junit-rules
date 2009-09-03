@@ -21,13 +21,14 @@ import com.sun.net.httpserver.HttpHandler;
 
 /**
  * Simplifies the effort to write an {@link HttpHandler}.
- *
+ * 
  * @author Alistair A. Israel
  */
 public abstract class SimpleHttpHandler implements HttpHandler {
 
     /**
-     * HTTP OK ({@value HttpURLConnection#HTTP_OK})
+     * HTTP OK ({@value #HTTP_OK})
+     * @see HttpURLConnection#HTTP_OK
      */
     public static final int HTTP_OK = HttpURLConnection.HTTP_OK;
 
@@ -41,7 +42,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
 
     /**
      * {@inheritDoc}
-     *
+     * 
      * @see com.sun.net.httpserver.HttpHandler#handle(com.sun.net.httpserver.HttpExchange)
      */
     @Override
@@ -64,8 +65,9 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Get the request URI
+     * 
+     * @return the request URI
      * @see com.sun.net.httpserver.HttpExchange#getRequestURI()
      */
     protected final URI getRequestURI() {
@@ -73,8 +75,14 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Returns a stream from which the request body can be read. Multiple calls
+     * to this method will return the same stream. It is recommended that
+     * applications should consume (read) all of the data from this stream
+     * before closing it. If a stream is closed before all data has been read,
+     * then the close() call will read and discard remaining data (up to an
+     * implementation specific number of bytes).
+     * 
+     * @return the stream from which the request body can be read.
      * @see com.sun.net.httpserver.HttpExchange#getRequestBody()
      */
     protected final InputStream getRequestBody() {
@@ -82,8 +90,15 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Returns an immutable Map containing the HTTP headers that were included
+     * with this request. The keys in this Map will be the header names, while
+     * the values will be a List of Strings containing each value that was
+     * included (either for a header that was listed several times, or one that
+     * accepts a comma-delimited list of values on a single line). In either of
+     * these cases, the values for the header name will be presented in the
+     * order that they were included in the request.
+     * 
+     * @return a read-only Map which can be used to access request headers
      * @see com.sun.net.httpserver.HttpExchange#getRequestHeaders()
      */
     protected final Headers getRequestHeaders() {
@@ -91,8 +106,10 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Get the request method
+     * 
+     * @return the request method
+     * 
      * @see com.sun.net.httpserver.HttpExchange#getRequestMethod()
      */
     protected final String getRequestMethod() {
@@ -100,9 +117,9 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * Returns a {@link PrintWriter} to the reponse buffer used to calculate the
-     * byte length of the actual HTTP response to be sent later.
-     *
+     * Returns a {@link PrintWriter} to the response buffer used to calculate
+     * the byte length of the actual HTTP response to be sent later.
+     * 
      * @return a {@link PrintWriter}
      */
     protected final PrintWriter getResponse() {
@@ -110,8 +127,14 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     }
 
     /**
-     * {@inheritDoc}
-     *
+     * Returns a mutable Map into which the HTTP response headers can be stored
+     * and which will be transmitted as part of this response. The keys in the
+     * Map will be the header names, while the values must be a List of Strings
+     * containing each value that should be included multiple times (in the
+     * order that they should be included).
+     * 
+     * @return a writable Map which can be used to set response headers.
+     * 
      * @see com.sun.net.httpserver.HttpExchange#getResponseHeaders()
      */
     protected final Headers getResponseHeaders() {

@@ -13,18 +13,16 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
-import org.junit.runners.model.Statement;
+import org.junit.rules.ExternalResource;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 /**
- *
+ * 
  * @author Alistair A. Israel
  */
-public class HttpServerInterceptor implements MethodRule {
+public class HttpServerInterceptor extends ExternalResource {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -77,27 +75,25 @@ public class HttpServerInterceptor implements MethodRule {
 
     /**
      * {@inheritDoc}
-     *
-     * @see org.junit.rules.MethodRule#apply(org.junit.runners.model.Statement,
-     *      org.junit.runners.model.FrameworkMethod, java.lang.Object)
+     * 
+     * @see org.junit.rules.ExternalResource#before()
      */
     @Override
-    public final Statement apply(final Statement base, final FrameworkMethod method,
-            final Object target) {
-        return new Statement() {
+    protected final void before() throws Throwable {
+        super.before();
+        httpServer = HttpServer.create(address, 0);
+        httpServer.start();
+    }
 
-            @Override
-            public void evaluate() throws Throwable {
-                httpServer = HttpServer.create(address, 0);
-                httpServer.start();
-                try {
-                    base.evaluate();
-                } finally {
-                    httpServer.stop(1);
-                }
-            }
-
-        };
+    /**
+     * {@inheritDoc}
+     * 
+     * @see org.junit.rules.ExternalResource#after()
+     */
+    @Override
+    protected final void after() {
+        httpServer.stop(0);
+        super.after();
     }
 
     /**
@@ -108,8 +104,7 @@ public class HttpServerInterceptor implements MethodRule {
      *         on exception
      */
     public final HttpURLConnection get(final String path) throws IOException {
-        final URL url =
-                new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
+        final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
