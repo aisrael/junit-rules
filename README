@@ -1,0 +1,8 @@
+junit-interceptors provides a showcase of JUnit interceptors
+
+Further reading:
+
+ * Functional HTTP testing revisited using JUnit 4.7 Interceptors
+   http://alistairisrael.wordpress.com/2009/09/03/functional-http-testing-revisited-using-junit-interceptors/
+ * Kent Beck, Interceptors in JUnit
+   http://www.threeriversinstitute.org/blog/?p=155
