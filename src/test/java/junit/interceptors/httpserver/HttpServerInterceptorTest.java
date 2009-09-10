@@ -21,7 +21,7 @@ import org.junit.Test;
 
 /**
  * JUnit test case for {@link HttpServerInterceptor}.
- * 
+ *
  * @author Alistair A. Israel
  */
 public final class HttpServerInterceptorTest {
@@ -29,7 +29,6 @@ public final class HttpServerInterceptorTest {
     // CHECKSTYLE:OFF
     @Rule
     public final HttpServerInterceptor httpServer = new HttpServerInterceptor();
-
     // CHECKSTYLE:ON
 
     /**
@@ -40,6 +39,7 @@ public final class HttpServerInterceptorTest {
     public void testHttpServerInterceptor() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
 
+            @Override
             protected void onGet() throws IOException {
                 getResponseWriter().println("<?xml version=\"1.0\"?>");
                 getResponseWriter().println("<resource id=\"1234\" name=\"test\" />");
@@ -47,7 +47,8 @@ public final class HttpServerInterceptorTest {
             }
         });
         final HttpURLConnection connection = httpServer.get("/");
-        BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in =
+                new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("<?xml version=\"1.0\"?>", in.readLine());
         assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
