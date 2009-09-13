@@ -11,6 +11,7 @@ package junit.interceptors.httpserver;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -21,7 +22,7 @@ import com.sun.net.httpserver.HttpHandler;
 
 /**
  * Simplifies the effort to write an {@link HttpHandler}.
- * 
+ *
  * @author Alistair A. Israel
  */
 public abstract class SimpleHttpHandler implements HttpHandler {
@@ -42,7 +43,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @see com.sun.net.httpserver.HttpHandler#handle(com.sun.net.httpserver.HttpExchange)
      */
     @Override
@@ -66,7 +67,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
 
     /**
      * Get the request URI
-     * 
+     *
      * @return the request URI
      * @see com.sun.net.httpserver.HttpExchange#getRequestURI()
      */
@@ -81,7 +82,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
      * before closing it. If a stream is closed before all data has been read,
      * then the close() call will read and discard remaining data (up to an
      * implementation specific number of bytes).
-     * 
+     *
      * @return the stream from which the request body can be read.
      * @see com.sun.net.httpserver.HttpExchange#getRequestBody()
      */
@@ -97,7 +98,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
      * accepts a comma-delimited list of values on a single line). In either of
      * these cases, the values for the header name will be presented in the
      * order that they were included in the request.
-     * 
+     *
      * @return a read-only Map which can be used to access request headers
      * @see com.sun.net.httpserver.HttpExchange#getRequestHeaders()
      */
@@ -107,9 +108,9 @@ public abstract class SimpleHttpHandler implements HttpHandler {
 
     /**
      * Get the request method
-     * 
+     *
      * @return the request method
-     * 
+     *
      * @see com.sun.net.httpserver.HttpExchange#getRequestMethod()
      */
     protected final String getRequestMethod() {
@@ -119,7 +120,7 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     /**
      * Returns a {@link PrintWriter} to the response buffer used to calculate
      * the byte length of the actual HTTP response to be sent later.
-     * 
+     *
      * @return a {@link PrintWriter}
      */
     protected final PrintWriter getResponseWriter() {
@@ -132,9 +133,9 @@ public abstract class SimpleHttpHandler implements HttpHandler {
      * Map will be the header names, while the values must be a List of Strings
      * containing each value that should be included multiple times (in the
      * order that they should be included).
-     * 
+     *
      * @return a writable Map which can be used to set response headers.
-     * 
+     *
      * @see com.sun.net.httpserver.HttpExchange#getResponseHeaders()
      */
     protected final Headers getResponseHeaders() {
@@ -156,7 +157,9 @@ public abstract class SimpleHttpHandler implements HttpHandler {
     protected final void sendResponse(final int responseCode) throws IOException {
         pw.flush();
         httpExchange.sendResponseHeaders(responseCode, out.size());
-        out.writeTo(httpExchange.getResponseBody());
+        final OutputStream responseBody = httpExchange.getResponseBody();
+        out.writeTo(responseBody);
+        responseBody.flush();
         httpExchange.close();
         responseCodeSent = responseCode;
     }
