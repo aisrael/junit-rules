@@ -24,7 +24,9 @@ public class TestFixture implements MethodRule {
      *      org.junit.runners.model.FrameworkMethod, java.lang.Object)
      */
     @Override
-    public final Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
+    public final Statement apply(final Statement base,
+            final FrameworkMethod method, final Object target) {
+        inspect(target);
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -39,10 +41,21 @@ public class TestFixture implements MethodRule {
     }
 
     /**
+     * Override to perform any reflection/introspection on the target test
+     * instance before setUp() / tearDown().
+     *
+     * @param target
+     *            the target (test) object
+     */
+    protected void inspect(final Object target) {
+
+    }
+
+    /**
      * Override to set up your specific external resource.
      *
      * @throws Throwable
-     *         if setup fails
+     *             if setup fails
      */
     protected void setUp() throws Throwable {
         // do nothing
@@ -52,7 +65,7 @@ public class TestFixture implements MethodRule {
      * Override to tear down your specific external resource.
      *
      * @throws Throwable
-     *         if teardown fails
+     *             if teardown fails
      */
     protected void tearDown() throws Throwable {
         // do nothing

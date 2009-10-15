@@ -1,0 +1,15 @@
+<!DOCTYPE dataset SYSTEM "dataset.dtd">
+<dataset>
+  <table name="widgets">
+    <column>id</column>
+    <column>name</column>
+    <row>
+      <value>1</value>
+      <value>First widget</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>Second widget</value>
+    </row>
+  </table>
+</dataset>
