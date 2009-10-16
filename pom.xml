@@ -23,7 +23,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.7</version>
+      <version>4.8-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
 
@@ -80,19 +80,17 @@
       <groupId>org.dbunit</groupId> <artifactId>dbunit</artifactId> <version>2.4.6</version> <scope>provided</scope>
       </dependency>
     -->
+
     <!--
-      SLF4J implementation is needed by Hibernate and DbUnit during test/run-time
+      Foundations
     -->
+    <!-- SLF4J implementation is needed by Hibernate, DbUnit, so we use it too -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>1.5.6</version>
       <scope>test</scope>
     </dependency>
-
-    <!--
-      Foundations
-    -->
     <!-- JPA -->
     <dependency>
       <groupId>javax.persistence</groupId>

@@ -36,7 +36,6 @@ public final class JettyInterceptorTest {
     // CHECKSTYLE:OFF
     @Rule
     public final JettyInterceptor jetty = new JettyInterceptor();
-
     // CHECKSTYLE:ON
 
     /**

@@ -2,11 +2,5 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
   version="1.0">
   <persistence-unit name="test">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <properties>
-      <property name="hibernate.connection.url" value="jdbc:derby:test;create=true" />
-      <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
-      <property name="hibernate.hbm2ddl.auto" value="create-drop" />
-    </properties>
   </persistence-unit>
 </persistence>

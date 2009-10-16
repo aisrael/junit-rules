@@ -6,7 +6,7 @@
  *
  * Created Oct 15, 2009
  */
-package junit.interceptors.db;
+package junit.interceptors.jpa;
 
 import junit.interceptors.TestFixture;
 
