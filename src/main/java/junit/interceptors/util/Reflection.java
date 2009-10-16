@@ -182,7 +182,17 @@ public final class Reflection {
     public static Object quietlyInvokeMethod(final Method method, final Object object,
             final Object... params) {
         try {
-            return method.invoke(object, params);
+            final boolean accessible = method.isAccessible();
+            if (!accessible) {
+                method.setAccessible(true);
+            }
+            try {
+                return method.invoke(object, params);
+            } finally {
+                if (!accessible) {
+                    method.setAccessible(false);
+                }
+            }
         } catch (final IllegalArgumentException e) {
             throw new RuntimeException(e.getMessage(), e);
         } catch (final IllegalAccessException e) {
