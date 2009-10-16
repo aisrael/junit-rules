@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>junit-interceptors</groupId>
-  <artifactId>junit-interceptors</artifactId>
-  <name>Java Interceptors Library</name>
+  <groupId>junit-rules</groupId>
+  <artifactId>junit-rules</artifactId>
+  <name>Java Rules Library</name>
   <version>0.3.1-SNAPSHOT</version>
 
   <licenses>
