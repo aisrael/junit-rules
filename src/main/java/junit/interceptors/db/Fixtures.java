@@ -6,7 +6,7 @@
  *
  * Created Oct 16, 2009
  */
-package junit.interceptors.dbunit;
+package junit.interceptors.db;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

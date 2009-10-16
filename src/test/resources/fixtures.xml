@@ -1,6 +1,6 @@
 <!DOCTYPE dataset SYSTEM "dataset.dtd">
 <dataset>
-  <table name="widgets">
+  <table name="widget">
     <column>id</column>
     <column>name</column>
     <row>
