@@ -5,7 +5,7 @@
   <groupId>junit-rules</groupId>
   <artifactId>junit-rules</artifactId>
   <name>Java Rules Library</name>
-  <version>0.4</version>
+  <version>0.4.1-SNAPSHOT</version>
 
   <licenses>
     <license>
