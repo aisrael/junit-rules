@@ -42,6 +42,8 @@ public class HibernatePersistenceContext extends TestFixture {
 
     private EntityManagerFactory entityManagerFactory;
 
+    private JdbcDatabaseTester jdbcDatabaseTester;
+
     /**
      * {@inheritDoc}
      *
@@ -76,15 +78,17 @@ public class HibernatePersistenceContext extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
+        DriverManager.getConnection("jdbc:derby:test;create=true");
+
         final Properties properties = new Properties();
-        properties.put("hibernate.connection.url", "jdbc:derby:test;create=true");
+        properties.put("hibernate.connection.url", "jdbc:derby:test");
         properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
 
         entityManagerFactory = new HibernatePersistence().createEntityManagerFactory("test", properties);
 
-        final JdbcDatabaseTester jdbcDatabaseTester = new JdbcDatabaseTester(
-                EmbeddedDriver.class.getName(), "jdbc:derby:test;create=true");
+        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(),
+                "jdbc:derby:test;create=true");
         final List<IDataSet> dataSets = new ArrayList<IDataSet>();
         for (final String fixtureName : fixtureNames) {
             LOGGER.trace("Attempting to load database fixture \"" + fixtureName + "\"");
@@ -124,6 +128,7 @@ public class HibernatePersistenceContext extends TestFixture {
      */
     @Override
     protected final void tearDown() throws Throwable {
+        jdbcDatabaseTester.onTearDown();
         entityManagerFactory.close();
         // shutdown Derby
         try {
