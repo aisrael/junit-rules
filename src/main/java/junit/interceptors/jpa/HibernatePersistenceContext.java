@@ -25,9 +25,10 @@ import junit.interceptors.db.Fixtures;
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
 import org.dbunit.dataset.CompositeDataSet;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
-import org.hibernate.ejb.HibernatePersistence;
+import org.hibernate.ejb.Ejb3Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,13 +37,42 @@ import org.slf4j.LoggerFactory;
  */
 public class HibernatePersistenceContext extends TestFixture {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
+    private static final Logger LOGGER = LoggerFactory
+            .getLogger(HibernatePersistenceContext.class);
 
     private final List<String> fixtureNames = new ArrayList<String>();
 
     private EntityManagerFactory entityManagerFactory;
 
     private JdbcDatabaseTester jdbcDatabaseTester;
+
+    /**
+     * @param classes
+     *            the annotated classes
+     */
+    public HibernatePersistenceContext(final Class<?>... classes) {
+        try {
+            DriverManager.getConnection("jdbc:derby:test;create=true");
+        } catch (final SQLException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+        final Properties properties = new Properties();
+        properties.put("hibernate.connection.url", "jdbc:derby:test");
+        properties.put("hibernate.connection.pool_size", "5");
+        properties.put("hibernate.dialect",
+                "org.hibernate.dialect.DerbyDialect");
+        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+
+        final Ejb3Configuration cfg = new Ejb3Configuration();
+        cfg.configure("test", properties);
+        for (final Class<?> clazz : classes) {
+            cfg.addAnnotatedClass(clazz);
+        }
+
+        entityManagerFactory = cfg.buildEntityManagerFactory();
+
+    }
 
     /**
      * {@inheritDoc}
@@ -63,7 +93,7 @@ public class HibernatePersistenceContext extends TestFixture {
 
     /**
      * @param annotation
-     *        the {@link Fixtures} annotation
+     *            the {@link Fixtures} annotation
      */
     private void addFixturesFromAnnotation(final Fixtures annotation) {
         for (final String fixtureName : annotation.value()) {
@@ -78,47 +108,67 @@ public class HibernatePersistenceContext extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
-        DriverManager.getConnection("jdbc:derby:test;create=true");
+        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class
+                .getName(), "jdbc:derby:test");
+        if (fixtureNames.isEmpty()) {
+            LOGGER
+                    .warn("No fixtures to load! Specify fixtures using @Fixtures.");
+        } else {
+            loadFixtures();
+        }
 
-        final Properties properties = new Properties();
-        properties.put("hibernate.connection.url", "jdbc:derby:test");
-        properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
+        jdbcDatabaseTester.onSetup();
+    }
 
-        entityManagerFactory = new HibernatePersistence().createEntityManagerFactory("test", properties);
-
-        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(),
-                "jdbc:derby:test;create=true");
+    /**
+     * @throws DataSetException
+     *             on any exception
+     */
+    private void loadFixtures() throws DataSetException {
         final List<IDataSet> dataSets = new ArrayList<IDataSet>();
+
         for (final String fixtureName : fixtureNames) {
-            LOGGER.trace("Attempting to load database fixture \"" + fixtureName + "\"");
-            IDataSet dataSet = null;
-
-            try {
-                final InputStream in = ClassLoader.getSystemResourceAsStream(fixtureName);
-                try {
-                    if (in != null) {
-                        if (fixtureName.endsWith(".xml")) {
-                            dataSet = new XmlDataSet(in);
-                        }
-                    }
-                } finally {
-                    in.close();
-                }
-            } catch (final Exception e) {
-                LOGGER.warn(e.getMessage(), e);
-            }
-
+            LOGGER.trace("Attempting to load database fixture \"" + fixtureName
+                    + "\"");
+            final IDataSet dataSet = attemptToLoadFixture(fixtureName);
             if (dataSet != null) {
                 dataSets.add(dataSet);
             }
         }
 
-        final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets
-                .toArray(new IDataSet[dataSets.size()]));
-        jdbcDatabaseTester.setDataSet(compositeDataSet);
+        if (dataSets.isEmpty()) {
+            LOGGER.warn("Found 0 data sets!");
+        } else {
+            final CompositeDataSet compositeDataSet = new CompositeDataSet(
+                    dataSets.toArray(new IDataSet[dataSets.size()]));
+            jdbcDatabaseTester.setDataSet(compositeDataSet);
+        }
+    }
 
-        jdbcDatabaseTester.onSetup();
+    /**
+     * @param fixtureName
+     *            the fixture name
+     * @return {@link IDataSet}
+     */
+    private IDataSet attemptToLoadFixture(final String fixtureName) {
+        IDataSet dataSet = null;
+
+        try {
+            final InputStream in = ClassLoader
+                    .getSystemResourceAsStream(fixtureName);
+            try {
+                if (in != null) {
+                    if (fixtureName.endsWith(".xml")) {
+                        dataSet = new XmlDataSet(in);
+                    }
+                }
+            } finally {
+                in.close();
+            }
+        } catch (final Exception e) {
+            LOGGER.warn(e.getMessage(), e);
+        }
+        return dataSet;
     }
 
     /**
@@ -131,17 +181,17 @@ public class HibernatePersistenceContext extends TestFixture {
         jdbcDatabaseTester.onTearDown();
         entityManagerFactory.close();
         // shutdown Derby
-        try {
-            DriverManager.getConnection("jdbc:derby:;shutdown=true");
-        } catch (final SQLException e) {
-            if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
-                LOGGER.info("Derby shut down normally");
-            } else {
-                // if the error code or SQLState is different, we have
-                // an unexpected exception (shutdown failed)
-                throw e;
-            }
-        }
+//        try {
+//            DriverManager.getConnection("jdbc:derby:test;shutdown=true");
+//        } catch (final SQLException e) {
+//            if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
+//                LOGGER.info("Derby shut down normally");
+//            } else {
+//                // if the error code or SQLState is different, we have
+//                // an unexpected exception (shutdown failed)
+//                throw e;
+//            }
+//        }
     }
 
     /**
