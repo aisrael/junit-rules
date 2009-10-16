@@ -9,6 +9,8 @@
 package junit.interceptors.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * <p>
@@ -45,7 +47,7 @@ public final class Reflection {
 
     /**
      * <p>
-     * Let's us write <code>ReflectionUtils.set(field)</code>.
+     * Lets us write <code>ReflectionUtils.set(field)</code>.
      * </p>
      */
     public static class FieldWrapper {
@@ -71,7 +73,7 @@ public final class Reflection {
 
         /**
          * <p>
-         * Let's us write <code>ReflectionUtils.set(field).of(target)</code>.
+         * Lets us write <code>ReflectionUtils.set(field).of(target)</code>.
          * </p>
          */
         public class Setter {
@@ -88,8 +90,7 @@ public final class Reflection {
 
             /**
              * <p>
-             * Let's us write
-             * <code>ReflectionUtils.set(field).of(target).to(value)</code> .
+             * Let's us write <code>ReflectionUtils.set(field).of(target).to(value)</code> .
              * </p>
              *
              * @param value
@@ -120,6 +121,73 @@ public final class Reflection {
                 field.setAccessible(false);
             }
         } catch (final IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * <p>
+     * Allows us to cleverly write:
+     * </p>
+     *
+     * <pre>
+     * Reflection.invoke(method).on(object);
+     * </pre>
+     *
+     * @author Alistair A. Israel
+     * @since 0.3.1
+     */
+    public static class MethodInvoker {
+
+        private final Method method;
+
+        /**
+         * @param method
+         *        the method to invoke
+         */
+        public MethodInvoker(final Method method) {
+            this.method = method;
+        }
+
+        /**
+         * @param object
+         *        the ojbect to invoke the method on
+         * @param params
+         *        any parameters to the method invocation
+         * @return any return value
+         */
+        public final Object on(final Object object, final Object... params) {
+            return quietlyInvokeMethod(method, object, params);
+        }
+    }
+
+    /**
+     * @param method
+     *        the method to invoke
+     * @return {@link MethodInvoker}
+     */
+    public static MethodInvoker invoke(final Method method) {
+        return new MethodInvoker(method);
+    }
+
+    /**
+     * @param method
+     *        the method to invoke
+     * @param object
+     *        the object to invoke the method on
+     * @param params
+     *        any parameters to the method
+     * @return any return value
+     */
+    public static Object quietlyInvokeMethod(final Method method, final Object object,
+            final Object... params) {
+        try {
+            return method.invoke(object, params);
+        } catch (final IllegalArgumentException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (final IllegalAccessException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        } catch (final InvocationTargetException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
     }

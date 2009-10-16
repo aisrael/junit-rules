@@ -8,6 +8,7 @@
  */
 package junit.interceptors.jpa;
 
+import static junit.interceptors.util.Reflection.invoke;
 import static junit.interceptors.util.Reflection.set;
 
 import java.io.InputStream;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
@@ -81,15 +83,32 @@ public class HibernatePersistenceContext extends TestFixture {
 
     /**
      * @param object
-     *        an object to which we will apply EJB 3.0 style @PersistenceContext
-     *        and @PostConstruct handling
+     *        an object to which we will apply EJB 3.0 style @PersistenceContext and @PostConstruct handling
      */
     public final void injectAndPostConstruct(final Object object) {
         final Class<? extends Object> clazz = object.getClass();
         for (final Field field : clazz.getDeclaredFields()) {
-            if (field.isAnnotationPresent(PersistenceContext.class)
-                    && field.getType().equals(EntityManager.class)) {
-                set(field).of(object).to(entityManager);
+            if (field.isAnnotationPresent(PersistenceContext.class)) {
+                final Class<?> type = field.getType();
+                if (type.equals(EntityManager.class)) {
+                    set(field).of(object).to(entityManager);
+                } else {
+                    LOGGER.warn("Found field \"{}\" annotated with @PersistenceContext "
+                            + "but is of type {}", field.getName(), type.getName());
+                }
+            }
+        }
+
+        for (final Method method : clazz.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(PostConstruct.class)) {
+                final int nParameters = method.getParameterTypes().length;
+                if (nParameters == 0) {
+                    invoke(method).on(object);
+                } else {
+                    LOGGER.warn("Found method \"{}\" annotated @PostConstruct "
+                            + "but don't know how to invoke with {} parameters", method.getName(),
+                            nParameters);
+                }
             }
         }
     }
@@ -97,8 +116,7 @@ public class HibernatePersistenceContext extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#inspect(java.lang.Object,
-     *      java.lang.reflect.Method)
+     * @see junit.interceptors.TestFixture#inspect(java.lang.Object, java.lang.reflect.Method)
      */
     @Override
     protected final void inspect(final Object target, final Method method) {
