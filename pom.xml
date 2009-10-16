@@ -5,7 +5,7 @@
   <groupId>junit-interceptors</groupId>
   <artifactId>junit-interceptors</artifactId>
   <name>Java Interceptors Library</name>
-  <version>0.3</version>
+  <version>0.3.1-SNAPSHOT</version>
 
   <licenses>
     <license>
@@ -169,8 +169,11 @@
     </plugins>
   </reporting>
 
-  <!--
-    <repositories> <repository> <id>repository.jboss.org</id> <url>http://repository.jboss.org/maven2/</url> <releases>
-    <enabled>true</enabled> </releases> <snapshots> <enabled>false</enabled> </snapshots> </repository> </repositories>
-  -->
+  <distributionManagement>
+    <repository>
+      <id>alistair.israel.github.com</id>
+      <url>file:///alistairisrael.github.com</url>
+    </repository>
+  </distributionManagement>
+
 </project>

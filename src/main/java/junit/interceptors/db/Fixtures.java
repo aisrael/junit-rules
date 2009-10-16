@@ -24,5 +24,5 @@ public @interface Fixtures {
     /**
      * The fixture names.
      */
-    String[] value() default { };
+    String[] value();
 }
