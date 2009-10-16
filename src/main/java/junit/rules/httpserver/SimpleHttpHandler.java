@@ -1,12 +1,12 @@
 /**
- * junit-interceptors: JUnit Interceptors Collection
+ * junit-rules: JUnit Rules Library
  *
  * Copyright (c) 2009 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Sep 1, 2009
  */
-package junit.interceptors.httpserver;
+package junit.rules.httpserver;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

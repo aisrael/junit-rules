@@ -1,15 +1,15 @@
 /**
- * junit-interceptors: JUnit Interceptors Collection
+ * junit-rules: JUnit Rules Library
  *
  * Copyright (c) 2009 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Oct 16, 2009
  */
-package junit.interceptors.jpa;
+package junit.rules.jpa;
 
-import static junit.interceptors.util.Reflection.invoke;
-import static junit.interceptors.util.Reflection.set;
+import static junit.rules.util.Reflection.invoke;
+import static junit.rules.util.Reflection.set;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -25,8 +25,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
-import junit.interceptors.TestFixture;
-import junit.interceptors.db.Fixtures;
+import junit.rules.TestFixture;
+import junit.rules.db.Fixtures;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
@@ -116,7 +116,7 @@ public class HibernatePersistenceContext extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#inspect(java.lang.Object, java.lang.reflect.Method)
+     * @see junit.rules.TestFixture#inspect(java.lang.Object, java.lang.reflect.Method)
      */
     @Override
     protected final void inspect(final Object target, final Method method) {
@@ -142,7 +142,7 @@ public class HibernatePersistenceContext extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#setUp()
+     * @see junit.rules.TestFixture#setUp()
      */
     @Override
     protected final void setUp() throws Throwable {
@@ -209,7 +209,7 @@ public class HibernatePersistenceContext extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#tearDown()
+     * @see junit.rules.TestFixture#tearDown()
      */
     @Override
     protected final void tearDown() throws Throwable {

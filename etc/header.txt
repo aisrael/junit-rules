@@ -1,5 +1,5 @@
 ^/\*\*$
-^ \* junit-interceptors: JUnit Interceptors Collection$
+^ \* junit-rules: JUnit Rules Library$
 ^ \*$
 ^ \* Copyright \(c\) \d{4} by Alistair A\. Israel\.$
 ^ \* This software is made available under the terms of the MIT License\.$

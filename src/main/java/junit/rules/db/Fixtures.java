@@ -1,12 +1,12 @@
 /**
- * junit-interceptors: JUnit Interceptors Collection
+ * junit-rules: JUnit Rules Library
  *
  * Copyright (c) 2009 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Oct 16, 2009
  */
-package junit.interceptors.db;
+package junit.rules.db;
 
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

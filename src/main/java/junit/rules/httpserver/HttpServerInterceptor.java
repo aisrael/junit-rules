@@ -1,19 +1,19 @@
 /**
- * junit-interceptors: JUnit Interceptors Collection
+ * junit-rules: JUnit Rules Library
  *
  * Copyright (c) 2009 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Aug 28, 2009
  */
-package junit.interceptors.httpserver;
+package junit.rules.httpserver;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-import junit.interceptors.TestFixture;
+import junit.rules.TestFixture;
 
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -76,7 +76,7 @@ public class HttpServerInterceptor extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#setUp()
+     * @see junit.rules.TestFixture#setUp()
      */
     @Override
     protected final void setUp() throws Throwable {
@@ -88,7 +88,7 @@ public class HttpServerInterceptor extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.interceptors.TestFixture#tearDown()
+     * @see junit.rules.TestFixture#tearDown()
      */
     @Override
     protected final void tearDown() throws Throwable {
