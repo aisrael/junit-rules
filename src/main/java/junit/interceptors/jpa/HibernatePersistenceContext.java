@@ -11,6 +11,7 @@ package junit.interceptors.jpa;
 import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -123,7 +124,19 @@ public class HibernatePersistenceContext extends TestFixture {
      */
     @Override
     protected final void tearDown() throws Throwable {
-        DriverManager.getDriver("jdbc:derby:test;shutdown=true");
+        entityManagerFactory.close();
+        // shutdown Derby
+        try {
+            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+        } catch (final SQLException e) {
+            if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
+                LOGGER.info("Derby shut down normally");
+            } else {
+                // if the error code or SQLState is different, we have
+                // an unexpected exception (shutdown failed)
+                throw e;
+            }
+        }
     }
 
     /**
