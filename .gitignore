@@ -1,6 +1,6 @@
 .*
 !.gitignore
-target
+target/
 nbactions.xml
 nbproject
 derby.log
