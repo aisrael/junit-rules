@@ -68,7 +68,7 @@ public class DerbyHibernateTestCase {
     public static void closeHibernateDerby() {
         ENTITY_MANAGER_FACTORY.get().close();
         try {
-            DriverManager.getConnection("jdbc:derby:;shutdown=true");
+            DriverManager.getConnection(JDBC_DERBY_URL + ";shutdown=true");
         } catch (final SQLException e) {
             if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
                 LOGGER.info("Derby shut down normally");

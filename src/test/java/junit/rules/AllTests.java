@@ -24,8 +24,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     HttpServerInterceptorTest.class,
     JettyInterceptorTest.class,
+    DerbyHibernateTestCaseTest.class,
     HibernatePersistenceContextTest.class,
-    DerbyHibernateTestCaseTest.class
 })
 public class AllTests {
 
