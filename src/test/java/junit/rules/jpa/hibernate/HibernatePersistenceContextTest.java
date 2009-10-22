@@ -6,7 +6,7 @@
  *
  * Created Oct 15, 2009
  */
-package junit.rules.jpa;
+package junit.rules.jpa.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -14,7 +14,6 @@ import static org.junit.Assert.assertNotNull;
 import java.util.List;
 
 import junit.rules.db.Fixtures;
-import junit.rules.jpa.hibernate.HibernatePersistenceContext;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +30,7 @@ public final class HibernatePersistenceContextTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public static HibernatePersistenceContext persistenceContext = new HibernatePersistenceContext(Widget.class);
+    public HibernatePersistenceContext persistenceContext = new HibernatePersistenceContext();
     // CHECKSTYLE:ON
 
     private WidgetBean widgetBean = new WidgetBean();
