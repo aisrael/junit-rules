@@ -25,15 +25,17 @@ public final class FixturesUtil {
     }
 
     /**
-     * @param element
-     *        the Class or Method to inspect for the {@link Fixtures} annotation
+     * @param elements
+     *        the Class(es) or Method(s) to inspect for the {@link Fixtures} annotation
      * @return the list of fixture names
      */
-    public static List<String> getFixtureNames(final AnnotatedElement element) {
+    public static List<String> getFixtureNames(final AnnotatedElement... elements) {
         final List<String> fixtureNames = new ArrayList<String>();
-        if (element.isAnnotationPresent(Fixtures.class)) {
-            for (final String fixtureName : element.getAnnotation(Fixtures.class).value()) {
-                fixtureNames.add(fixtureName);
+        for (final AnnotatedElement element : elements) {
+            if (element.isAnnotationPresent(Fixtures.class)) {
+                for (final String fixtureName : element.getAnnotation(Fixtures.class).value()) {
+                    fixtureNames.add(fixtureName);
+                }
             }
         }
         return fixtureNames;

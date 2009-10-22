@@ -8,8 +8,9 @@
  */
 package junit.rules.dbunit;
 
+import static junit.rules.dbunit.FixturesUtil.getFixtureNames;
+
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 
 import junit.rules.TestFixture;
@@ -26,7 +27,7 @@ public class DbUnitTestFixtures extends TestFixture {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DbUnitTestFixtures.class);
 
-    private final List<String> fixtureNames = new ArrayList<String>();
+    private List<String> fixtureNames;
 
     private JdbcDatabaseTester jdbcDatabaseTester;
 
@@ -37,8 +38,7 @@ public class DbUnitTestFixtures extends TestFixture {
      */
     @Override
     protected final void inspect(final Object target, final Method method) {
-        fixtureNames.addAll(FixturesUtil.getFixtureNames(target.getClass()));
-        fixtureNames.addAll(FixturesUtil.getFixtureNames(method));
+        fixtureNames = getFixtureNames(target.getClass(), method);
     }
 
     /**

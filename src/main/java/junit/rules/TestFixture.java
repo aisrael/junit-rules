@@ -22,8 +22,8 @@ public class TestFixture implements MethodRule {
     /**
      * {@inheritDoc}
      *
-     * @see org.junit.rules.MethodRule#apply(org.junit.runners.model.Statement,
-     *      org.junit.runners.model.FrameworkMethod, java.lang.Object)
+     * @see org.junit.rules.MethodRule#apply(org.junit.runners.model.Statement, org.junit.runners.model.FrameworkMethod,
+     *      java.lang.Object)
      */
     @Override
     public final Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
@@ -42,8 +42,7 @@ public class TestFixture implements MethodRule {
     }
 
     /**
-     * Override to perform any reflection/introspection on the target test
-     * instance before setUp() / tearDown().
+     * Override to perform any reflection/introspection on the target test instance before setUp() / tearDown().
      *
      * @param target
      *        the target (test) object
@@ -51,7 +50,6 @@ public class TestFixture implements MethodRule {
      *        the target test method
      */
     protected void inspect(final Object target, final Method method) {
-
     }
 
     /**
@@ -61,7 +59,6 @@ public class TestFixture implements MethodRule {
      *         if setup fails
      */
     protected void setUp() throws Throwable {
-        // do nothing
     }
 
     /**
@@ -71,6 +68,5 @@ public class TestFixture implements MethodRule {
      *         if teardown fails
      */
     protected void tearDown() throws Throwable {
-        // do nothing
     }
 }
