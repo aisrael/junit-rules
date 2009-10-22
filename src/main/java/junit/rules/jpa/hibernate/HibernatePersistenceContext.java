@@ -26,7 +26,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 
 import junit.rules.TestFixture;
-import junit.rules.db.Fixtures;
+import junit.rules.dbunit.Fixtures;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
@@ -44,12 +44,12 @@ import org.slf4j.LoggerFactory;
  */
 public class HibernatePersistenceContext extends TestFixture implements junit.rules.jpa.PersistenceContext {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
+
     /**
-     *
+     * {@value #JDBC_DERBY_URL}
      */
     private static final String JDBC_DERBY_URL = "jdbc:derby:target/DerbyDB";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
 
     private final List<String> fixtureNames = new ArrayList<String>();
 
@@ -218,18 +218,6 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
     protected final void tearDown() throws Throwable {
         jdbcDatabaseTester.onTearDown();
         entityManagerFactory.close();
-        // shutdown Derby
-        // try {
-        // DriverManager.getConnection("jdbc:derby:test;shutdown=true");
-        // } catch (final SQLException e) {
-        // if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
-        // LOGGER.info("Derby shut down normally");
-        // } else {
-        // // if the error code or SQLState is different, we have
-        // // an unexpected exception (shutdown failed)
-        // throw e;
-        // }
-        // }
     }
 
     /**

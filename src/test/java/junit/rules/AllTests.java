@@ -10,6 +10,7 @@ package junit.rules;
 
 import junit.rules.httpserver.HttpServerInterceptorTest;
 import junit.rules.jetty.JettyInterceptorTest;
+import junit.rules.jpa.hibernate.DerbyHibernateTestCaseTest;
 import junit.rules.jpa.hibernate.HibernatePersistenceContextTest;
 
 import org.junit.runner.RunWith;
@@ -23,6 +24,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     HttpServerInterceptorTest.class,
     JettyInterceptorTest.class,
+    DerbyHibernateTestCaseTest.class,
     HibernatePersistenceContextTest.class }
 )
 public class AllTests {

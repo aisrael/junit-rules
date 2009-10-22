@@ -15,7 +15,7 @@ import java.util.List;
 
 import junit.rules.dbunit.Fixtures;
 
-import org.junit.Rule;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.example.ejb3.beans.WidgetBean;
@@ -26,14 +26,17 @@ import com.example.model.Widget;
  * @since 0.3
  */
 @Fixtures("fixtures.xml")
-public final class HibernatePersistenceContextTest {
-
-    // CHECKSTYLE:OFF
-    @Rule
-    public HibernatePersistenceContext persistenceContext = new HibernatePersistenceContext();
-    // CHECKSTYLE:ON
+public final class DerbyHibernateTestCaseTest extends DerbyHibernateTestCase {
 
     private WidgetBean widgetBean = new WidgetBean();
+
+    /**
+     *
+     */
+    @Before
+    public void setUp() {
+        injectAndPostConstruct(widgetBean);
+    }
 
     /**
      * @throws Exception
@@ -41,8 +44,6 @@ public final class HibernatePersistenceContextTest {
      */
     @Test
     public void testListAll() throws Exception {
-        persistenceContext.injectAndPostConstruct(widgetBean);
-
         final List<Widget> widgets = widgetBean.listAll();
         assertNotNull(widgets);
         assertEquals(2, widgets.size());
@@ -54,8 +55,6 @@ public final class HibernatePersistenceContextTest {
      */
     @Test
     public void testFindById() throws Exception {
-        persistenceContext.injectAndPostConstruct(widgetBean);
-
         final Widget widget = widgetBean.findById(2);
         assertNotNull(widget);
         assertEquals(2, widget.getId().intValue());
