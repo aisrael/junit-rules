@@ -31,7 +31,7 @@ public final class HibernatePersistenceContextTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public static HibernatePersistenceContext persistenceContext = new HibernatePersistenceContext();
+    public static HibernatePersistenceContext persistenceContext = new HibernatePersistenceContext(Widget.class);
     // CHECKSTYLE:ON
 
     private WidgetBean widgetBean = new WidgetBean();
@@ -41,7 +41,6 @@ public final class HibernatePersistenceContextTest {
      *         on exception
      */
     @Test
-    
     public void testListAll() throws Exception {
         persistenceContext.injectAndPostConstruct(widgetBean);
 

@@ -93,8 +93,8 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
                 if (type.equals(EntityManager.class)) {
                     set(field).of(object).to(entityManager);
                 } else {
-                    LOGGER.warn("Found field \"{}\" annotated with @PersistenceContext "
-                            + "but is of type {}", field.getName(), type.getName());
+                    LOGGER.warn("Found field \"{}\" annotated with @PersistenceContext " + "but is of type {}", field
+                            .getName(), type.getName());
                 }
             }
         }
@@ -106,8 +106,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
                     invoke(method).on(object);
                 } else {
                     LOGGER.warn("Found method \"{}\" annotated @PostConstruct "
-                            + "but don't know how to invoke with {} parameters", method.getName(),
-                            nParameters);
+                            + "but don't know how to invoke with {} parameters", method.getName(), nParameters);
                 }
             }
         }
@@ -146,8 +145,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
      */
     @Override
     protected final void setUp() throws Throwable {
-        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(),
-                "jdbc:derby:target/DerbyDB");
+        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), "jdbc:derby:target/DerbyDB");
         if (fixtureNames.isEmpty()) {
             LOGGER.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
@@ -175,8 +173,8 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
         if (dataSets.isEmpty()) {
             LOGGER.warn("Found 0 data sets!");
         } else {
-            final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets
-                    .toArray(new IDataSet[dataSets.size()]));
+            final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets.toArray(new IDataSet[dataSets
+                    .size()]));
             jdbcDatabaseTester.setDataSet(compositeDataSet);
         }
     }
