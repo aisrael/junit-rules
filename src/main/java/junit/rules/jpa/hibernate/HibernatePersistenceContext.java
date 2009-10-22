@@ -8,6 +8,7 @@
  */
 package junit.rules.jpa.hibernate;
 
+import static junit.rules.jpa.hibernate.DerbyHibernateUtil.JDBC_DERBY_URL;
 import static junit.rules.util.Reflection.invoke;
 import static junit.rules.util.Reflection.set;
 
@@ -46,11 +47,6 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
 
-    /**
-     * {@value #JDBC_DERBY_URL}
-     */
-    private static final String JDBC_DERBY_URL = "jdbc:derby:target/DerbyDB";
-
     private final List<String> fixtureNames = new ArrayList<String>();
 
     private EntityManagerFactory entityManagerFactory;
@@ -71,7 +67,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
         }
 
         final Properties properties = new Properties();
-        properties.put("hibernate.connection.url", JDBC_DERBY_URL);
+        properties.put("hibernate.connection.url", DerbyHibernateUtil.JDBC_DERBY_URL);
         properties.put("hibernate.connection.pool_size", "5");
         properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
@@ -150,7 +146,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
      */
     @Override
     protected final void setUp() throws Throwable {
-        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), JDBC_DERBY_URL);
+        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), DerbyHibernateUtil.JDBC_DERBY_URL);
         if (fixtureNames.isEmpty()) {
             LOGGER.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
