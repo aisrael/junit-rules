@@ -184,8 +184,8 @@
 
   <distributionManagement>
     <repository>
-      <id>alistair.israel.github.com</id>
-      <url>file:///alistairisrael.github.com</url>
+      <id>maven2.github.com</id>
+      <url>file:///maven2.github.com</url>
     </repository>
   </distributionManagement>
 
