@@ -25,9 +25,8 @@ import org.junit.runners.Suite.SuiteClasses;
     HttpServerInterceptorTest.class,
     JettyInterceptorTest.class,
     HibernatePersistenceContextTest.class,
-    DerbyHibernateTestCaseTest.class,
-}
-)
+    DerbyHibernateTestCaseTest.class
+})
 public class AllTests {
 
 }
