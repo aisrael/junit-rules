@@ -4,8 +4,8 @@
 
   <groupId>junit-rules</groupId>
   <artifactId>junit-rules</artifactId>
-  <name>Java Rules Library</name>
-  <version>0.4.2-SNAPSHOT</version>
+  <name>JUnit Rules Library</name>
+  <version>0.4.2</version>
 
   <licenses>
     <license>
@@ -181,12 +181,5 @@
       </plugin>
     </plugins>
   </reporting>
-
-  <distributionManagement>
-    <repository>
-      <id>maven2.github.com</id>
-      <url>file:///maven2.github.com</url>
-    </repository>
-  </distributionManagement>
 
 </project>
