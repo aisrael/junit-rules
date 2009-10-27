@@ -32,9 +32,11 @@ public final class DerbyHibernateUtil {
     }
 
     /**
+     * @param classes
+     *        the annotated classes
      * @return {@link Ejb3Configuration}
      */
-    public static Ejb3Configuration configureDerbyHibernateJpa() {
+    public static Ejb3Configuration configureDerbyHibernateJpa(final Class<?>... classes) {
         try {
             DriverManager.getConnection(JDBC_DERBY_URL + ";create=true");
         } catch (final SQLException e) {
@@ -49,6 +51,9 @@ public final class DerbyHibernateUtil {
 
         final Ejb3Configuration cfg = new Ejb3Configuration();
         cfg.configure("test", properties);
+        for (final Class<?> clazz : classes) {
+            cfg.addAnnotatedClass(clazz);
+        }
         return cfg;
     }
 

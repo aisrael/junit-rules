@@ -8,18 +8,14 @@
  */
 package junit.rules.jpa.hibernate;
 
-import static junit.rules.jpa.hibernate.DerbyHibernateUtil.JDBC_DERBY_URL;
 import static junit.rules.util.Reflection.invoke;
 import static junit.rules.util.Reflection.set;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
@@ -60,24 +56,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
      *        the annotated classes
      */
     public HibernatePersistenceContext(final Class<?>... classes) {
-        try {
-            DriverManager.getConnection(JDBC_DERBY_URL + ";create=true");
-        } catch (final SQLException e) {
-            throw new RuntimeException(e.getMessage(), e);
-        }
-
-        final Properties properties = new Properties();
-        properties.put("hibernate.connection.url", DerbyHibernateUtil.JDBC_DERBY_URL);
-        properties.put("hibernate.connection.pool_size", "5");
-        properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
-
-        final Ejb3Configuration cfg = new Ejb3Configuration();
-        cfg.configure("test", properties);
-        for (final Class<?> clazz : classes) {
-            cfg.addAnnotatedClass(clazz);
-        }
-
+        final Ejb3Configuration cfg = DerbyHibernateUtil.configureDerbyHibernateJpa(classes);
         entityManagerFactory = cfg.buildEntityManagerFactory();
         entityManager = entityManagerFactory.createEntityManager();
     }
