@@ -70,7 +70,7 @@ public class DerbyHibernateTestCase {
         try {
             DriverManager.getConnection(JDBC_DERBY_URL + ";shutdown=true");
         } catch (final SQLException e) {
-            if (e.getErrorCode() == 50000 && "XJ015".equals(e.getSQLState())) {
+            if (e.getErrorCode() == 45000 && "08006".equals(e.getSQLState())) {
                 LOGGER.info("Derby shut down normally");
             } else {
                 // if the error code or SQLState is different, we have
