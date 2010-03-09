@@ -22,11 +22,6 @@ import com.sun.net.httpserver.HttpServer;
  */
 public class HttpServerRule extends BaseHttpServerRule {
 
-    /**
-     * The default HTTP port to listen to, port 80
-     */
-    public static final int DEFAULT_HTTP_PORT = 8000;
-
     private final InetSocketAddress address;
 
     private HttpServer httpServer;

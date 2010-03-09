@@ -23,11 +23,6 @@ import org.mortbay.jetty.Server;
  */
 public class JettyServerRule extends BaseHttpServerRule {
 
-    /**
-     * The default HTTP port to listen to, port 80
-     */
-    public static final int DEFAULT_HTTP_PORT = 8000;
-
     private final int port;
 
     private Server server;
