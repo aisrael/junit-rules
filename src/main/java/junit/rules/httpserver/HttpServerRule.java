@@ -22,7 +22,7 @@ import com.sun.net.httpserver.HttpServer;
  *
  * @author Alistair A. Israel
  */
-public class HttpServerInterceptor extends TestFixture {
+public class HttpServerRule extends TestFixture {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -36,7 +36,7 @@ public class HttpServerInterceptor extends TestFixture {
     /**
      *
      */
-    public HttpServerInterceptor() {
+    public HttpServerRule() {
         this(DEFAULT_HTTP_PORT);
     }
 
@@ -44,7 +44,7 @@ public class HttpServerInterceptor extends TestFixture {
      * @param port
      *        the port to listen (HTTP) on
      */
-    public HttpServerInterceptor(final int port) {
+    public HttpServerRule(final int port) {
         this(new InetSocketAddress(port));
     }
 
@@ -52,7 +52,7 @@ public class HttpServerInterceptor extends TestFixture {
      * @param address
      *        {@link InetSocketAddress}
      */
-    public HttpServerInterceptor(final InetSocketAddress address) {
+    public HttpServerRule(final InetSocketAddress address) {
         this.address = address;
     }
 

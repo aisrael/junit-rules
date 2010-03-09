@@ -27,15 +27,15 @@ import org.junit.Test;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 /**
- * JUnit test case for {@link JettyInterceptor}
+ * JUnit test case for {@link JettyServerRule}
  *
  * @author Alistair A. Israel
  */
-public final class JettyInterceptorTest {
+public final class JettyServerRuleTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public final JettyInterceptor jetty = new JettyInterceptor();
+    public final JettyServerRule jetty = new JettyServerRule();
     // CHECKSTYLE:ON
 
     /**

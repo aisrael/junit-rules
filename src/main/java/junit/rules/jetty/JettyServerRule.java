@@ -16,7 +16,7 @@ import org.mortbay.jetty.Server;
 /**
  * @author Alistair A. Israel
  */
-public class JettyInterceptor extends TestFixture {
+public class JettyServerRule extends TestFixture {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -30,7 +30,7 @@ public class JettyInterceptor extends TestFixture {
     /**
      *
      */
-    public JettyInterceptor() {
+    public JettyServerRule() {
         this(DEFAULT_HTTP_PORT);
     }
 
@@ -38,7 +38,7 @@ public class JettyInterceptor extends TestFixture {
      * @param port
      *        the port to listen (HTTP) on
      */
-    public JettyInterceptor(final int port) {
+    public JettyServerRule(final int port) {
         this.port = port;
     }
 

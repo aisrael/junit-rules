@@ -20,15 +20,15 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * JUnit test case for {@link HttpServerInterceptor}.
+ * JUnit test case for {@link HttpServerRule}.
  *
  * @author Alistair A. Israel
  */
-public final class HttpServerInterceptorTest {
+public final class HttpServerRuleTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public final HttpServerInterceptor httpServer = new HttpServerInterceptor();
+    public final HttpServerRule httpServer = new HttpServerRule();
     // CHECKSTYLE:ON
 
     /**
