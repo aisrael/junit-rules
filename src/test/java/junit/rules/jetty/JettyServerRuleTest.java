@@ -16,7 +16,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +34,7 @@ public final class JettyServerRuleTest {
 
     // CHECKSTYLE:OFF
     @Rule
-    public final JettyServerRule jetty = new JettyServerRule();
+    public final JettyServerRule jettyServer = new JettyServerRule();
     // CHECKSTYLE:ON
 
     /**
@@ -44,7 +43,7 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testHttpServerInterceptor() throws Exception {
-        jetty.setHandler(new AbstractHandler() {
+        jettyServer.setHandler(new AbstractHandler() {
 
             @Override
             public void handle(final String target, final HttpServletRequest request,
@@ -58,8 +57,7 @@ public final class JettyServerRuleTest {
             }
         });
 
-        final URL url = new URL("http://localhost:" + jetty.getPort() + "/1234.xml");
-        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        final HttpURLConnection connection = jettyServer.get("/1234.xml");
         final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("<?xml version=\"1.0\"?>", in.readLine());
         assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());

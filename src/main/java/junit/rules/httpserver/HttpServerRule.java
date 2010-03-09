@@ -13,8 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.URL;
 
-import junit.rules.TestFixture;
-
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
@@ -22,7 +20,7 @@ import com.sun.net.httpserver.HttpServer;
  *
  * @author Alistair A. Israel
  */
-public class HttpServerRule extends TestFixture {
+public class HttpServerRule extends BaseHttpServerRule {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -80,7 +78,6 @@ public class HttpServerRule extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
-        super.setUp();
         httpServer = HttpServer.create(address, 0);
         httpServer.start();
     }
@@ -93,7 +90,6 @@ public class HttpServerRule extends TestFixture {
     @Override
     protected final void tearDown() throws Throwable {
         httpServer.stop(0);
-        super.tearDown();
     }
 
     /**
@@ -103,6 +99,7 @@ public class HttpServerRule extends TestFixture {
      * @throws IOException
      *         on exception
      */
+    @Override
     public final HttpURLConnection get(final String path) throws IOException {
         final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
         final HttpURLConnection connection = (HttpURLConnection) url.openConnection();

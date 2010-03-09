@@ -8,7 +8,12 @@
  */
 package junit.rules.jetty;
 
-import junit.rules.TestFixture;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.URL;
+
+import junit.rules.httpserver.BaseHttpServerRule;
 
 import org.mortbay.jetty.Handler;
 import org.mortbay.jetty.Server;
@@ -16,7 +21,7 @@ import org.mortbay.jetty.Server;
 /**
  * @author Alistair A. Israel
  */
-public class JettyServerRule extends TestFixture {
+public class JettyServerRule extends BaseHttpServerRule {
 
     /**
      * The default HTTP port to listen to, port 80
@@ -56,7 +61,6 @@ public class JettyServerRule extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
-        super.setUp();
         server = new Server(port);
         server.start();
     }
@@ -78,6 +82,23 @@ public class JettyServerRule extends TestFixture {
     @Override
     protected final void tearDown() throws Throwable {
         server.stop();
-        super.tearDown();
     }
+
+    /**
+     * @param path
+     *        the URI path to GET
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    @Override
+    public final HttpURLConnection get(final String path) throws IOException {
+        final InetSocketAddress address = new InetSocketAddress(getPort());
+        final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        connection.connect();
+        return connection;
+    }
+
 }
