@@ -119,9 +119,8 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.3</version>
         <configuration>
-          <configLocation>etc/checkstyle.xml</configLocation>
+          <configLocation>${basedir}/etc/checkstyle.xml</configLocation>
           <propertyExpansion>config_loc=${project.basedir}/etc</propertyExpansion>
           <consoleOutput>true</consoleOutput>
           <failsOnError>true</failsOnError>
