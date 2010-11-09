@@ -116,4 +116,9 @@
     <property name="headerFile" value="${config_loc}/header.txt"/>
     <property name="fileExtensions" value="java"/>
   </module>
+  <module name="SuppressWithNearbyCommentFilter">
+    <property name="commentFormat" value="SUPPRESS\ CHECKSTYLE\ (\w+)"/>
+    <property name="checkFormat" value="$1"/>
+    <property name="influenceFormat" value="1"/>
+  </module>
 </module>
