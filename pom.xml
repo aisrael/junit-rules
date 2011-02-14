@@ -20,11 +20,11 @@
   </properties>
 
   <dependencies>
-    <!-- JUnit, http://www.junit.org  -->
+    <!-- JUnit, http://www.junit.org -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.8.1</version>
+      <version>4.8.2</version>
       <scope>compile</scope>
     </dependency>
 
@@ -37,6 +37,7 @@
       <artifactId>jetty</artifactId>
       <version>6.1.20</version>
       <scope>provided</scope>
+      <optional>true</optional>
     </dependency>
 
     <!--
@@ -47,32 +48,23 @@
       <artifactId>hibernate-core</artifactId>
       <version>3.3.2.GA</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-annotations</artifactId>
-      <version>3.4.0.GA</version>
-      <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-entitymanager</artifactId>
       <version>3.4.0.GA</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-commons-annotations</artifactId>
-      <version>3.3.0.ga</version>
-      <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
 
     <!-- Apache Derby for embedded JPA testing -->
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.5.3.0_1</version>
+      <version>10.6.2.1</version>
       <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
 
     <!-- DbUnit database testing -->
@@ -81,18 +73,29 @@
       <artifactId>dbunit</artifactId>
       <version>2.4.6</version>
       <scope>compile</scope>
+      <optional>true</optional>
     </dependency>
 
     <!--
-      Foundations
+      Logging
     -->
-    <!-- SLF4J implementation is needed by Hibernate, DbUnit, so we use it too -->
+    <!-- SLF4J implementation is used by Hibernate, DbUnit, so we use it too -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.5.6</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>1.5.6</version>
       <scope>test</scope>
     </dependency>
+
+    <!--
+      Foundations
+    -->
     <!-- JPA -->
     <dependency>
       <groupId>javax.persistence</groupId>
@@ -100,7 +103,6 @@
       <version>1.0</version>
       <scope>provided</scope>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -109,6 +111,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
@@ -119,6 +122,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>2.6</version>
         <configuration>
           <configLocation>${basedir}/etc/checkstyle.xml</configLocation>
           <propertyExpansion>config_loc=${project.basedir}/etc</propertyExpansion>
@@ -140,12 +144,11 @@
         </executions>
       </plugin>
 
-      <!--
-        Configure the source plugin to execute before the install phase
-      -->
+      <!-- Configure the source plugin to execute before the install phase -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -160,6 +163,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.7.1</version>
         <configuration>
           <systemProperties>
             <property>
@@ -169,15 +173,17 @@
           </systemProperties>
         </configuration>
       </plugin>
-      
+
     </plugins>
   </build>
 
   <reporting>
     <plugins>
+      <!-- Generate Javadocs as part of project reports -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.7</version>
       </plugin>
     </plugins>
   </reporting>
