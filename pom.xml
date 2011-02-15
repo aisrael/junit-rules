@@ -117,7 +117,7 @@
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-jdk14</artifactId>
+      <artifactId>slf4j-log4j12</artifactId>
       <version>1.5.10</version>
       <scope>test</scope>
       <exclusions>
@@ -221,6 +221,10 @@
             <property>
               <name>derby.stream.error.file</name>
               <value>${project.build.directory}/derby.log</value>
+            </property>
+            <property>
+              <name>log4j.configuration</name>
+              <value>log4j.properties</value>
             </property>
           </systemProperties>
         </configuration>
