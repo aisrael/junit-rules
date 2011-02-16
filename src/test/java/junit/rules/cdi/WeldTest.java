@@ -1,7 +1,7 @@
 /**
  * junit-rules: JUnit Rules Library
  *
- * Copyright (c) 2011 by Alistair A. Israel.
+ * Copyright (c) 2009-2011 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Feb 15, 2011
@@ -46,10 +46,11 @@ public final class WeldTest {
         public void testInjection() {
             assertNotNull(classUnderTest);
             assertNotNull(classUnderTest.dependency);
+            System.out.println(classUnderTest.dependency.getClass().getCanonicalName());
         }
     }
 
-    /**
+        /**
      * Test Weld {@code @Rule} using {@link UsesWeldTest}.
      */
     @Test
@@ -77,6 +78,14 @@ public final class WeldTest {
      * The default implementation of Dependency.
      */
     public static class DependencyImpl implements Dependency {
+
+    }
+
+    /**
+     *
+     */
+    @Mock
+    public static class MockDependency implements Dependency {
 
     }
 }

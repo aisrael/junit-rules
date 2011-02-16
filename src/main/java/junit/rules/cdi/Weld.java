@@ -1,7 +1,7 @@
 /**
  * junit-rules: JUnit Rules Library
  *
- * Copyright (c) 2011 by Alistair A. Israel.
+ * Copyright (c) 2009-2011 by Alistair A. Israel.
  * This software is made available under the terms of the MIT License.
  *
  * Created Feb 15, 2011
