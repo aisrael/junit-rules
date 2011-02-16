@@ -51,11 +51,12 @@ public class Weld implements MethodRule {
     @Override
     public final Statement apply(final Statement base, final FrameworkMethod method,
             final Object target) {
-        logger.trace("apply({}.{})", method.getMethod().getDeclaringClass().getCanonicalName(), method.getName());
+        logger.trace("apply({}.{})", method.getMethod().getDeclaringClass().getCanonicalName(),
+                method.getName());
         final BeanManager bm = weldContainer.getBeanManager();
+        final Class<?> cl = target.getClass();
         @SuppressWarnings("unchecked")
-        final AnnotatedType<Object> at =
-                (AnnotatedType<Object>) bm.createAnnotatedType(target.getClass());
+        final AnnotatedType<Object> at = (AnnotatedType<Object>) bm.createAnnotatedType(cl);
         final InjectionTarget<Object> it = bm.createInjectionTarget(at);
         return new Statement() {
             @Override

@@ -8,6 +8,7 @@
  */
 package junit.rules.cdi;
 
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -24,7 +25,7 @@ import javax.enterprise.inject.Stereotype;
 @Alternative
 @Stereotype
 @Retention(RUNTIME)
-@Target(TYPE)
+@Target({ TYPE, FIELD })
 public @interface Mock {
 
 }
