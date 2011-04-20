@@ -5,7 +5,7 @@
   <groupId>junit-rules</groupId>
   <artifactId>junit-rules</artifactId>
   <name>JUnit Rules Library</name>
-  <version>0.5-SNAPSHOT</version>
+  <version>0.5-beobal-SNAPSHOT</version>
 
   <licenses>
     <license>
@@ -36,6 +36,7 @@
       <groupId>org.jboss.weld.se</groupId>
       <artifactId>weld-se-core</artifactId>
       <version>1.1.0.Final</version>
+      <optional>true</optional>
     </dependency>
     
     <!-- Jetty HTTP Server -->

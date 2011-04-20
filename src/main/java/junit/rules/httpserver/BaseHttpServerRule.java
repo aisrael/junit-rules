@@ -32,4 +32,30 @@ public abstract class BaseHttpServerRule extends TestFixture {
      */
     public abstract HttpURLConnection get(final String path) throws IOException;
 
+    /**
+     * @param path
+     *        the URI path to POST to
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    public abstract HttpURLConnection post(final String path) throws IOException;
+
+    /**
+     * @param path
+     *        the URI path to PUT to
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    public abstract HttpURLConnection put(final String path) throws IOException;
+
+    /**
+     * @param path
+     *        the URI path to DELETE
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    public abstract HttpURLConnection delete(final String path) throws IOException;
 }
