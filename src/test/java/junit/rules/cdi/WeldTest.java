@@ -9,6 +9,7 @@
 package junit.rules.cdi;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import javax.inject.Inject;
 
@@ -46,7 +47,7 @@ public final class WeldTest {
         public void testInjection() {
             assertNotNull(classUnderTest);
             assertNotNull(classUnderTest.dependency);
-            System.out.println(classUnderTest.dependency.getClass().getCanonicalName());
+            assertTrue(classUnderTest.dependency instanceof MockDependency);
         }
     }
 
@@ -82,7 +83,7 @@ public final class WeldTest {
     }
 
     /**
-     *
+     * The mock implementation of Dependency, which is what we're interested in.
      */
     @Mock
     public static class MockDependency implements Dependency {
