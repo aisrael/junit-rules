@@ -22,15 +22,12 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import junit.rules.util.SimpleReference;
 
 import org.junit.Rule;
 import org.junit.Test;
-import org.mortbay.jetty.handler.AbstractHandler;
 
 /**
  * <p>
@@ -47,6 +44,7 @@ public final class JettyServerRuleTest {
     // CHECKSTYLE:OFF
     @Rule
     public final JettyServerRule jettyServer = new JettyServerRule();
+
     // CHECKSTYLE:ON
 
     /**
@@ -106,15 +104,13 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testJettyServerRulePutMethod() throws Exception {
-        jettyServer.setHandler(new AbstractHandler() {
+        jettyServer.setHandler(new SimpleJettyHandler() {
             @Override
-            public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-                final PrintWriter out = response.getWriter();
+            protected void onPut() throws IOException {
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(request().getInputStream()));
+                final PrintWriter out = getResponseWriter();
                 out.println(reader.readLine());
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.flushBuffer();
+                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.put("/");
@@ -135,13 +131,11 @@ public final class JettyServerRuleTest {
     @Test
     public void testJettyServerRuleDeleteMethod() throws Exception {
         final SimpleReference<Boolean> deleteIssued = SimpleReference.to(FALSE);
-        jettyServer.setHandler(new AbstractHandler() {
+        jettyServer.setHandler(new SimpleJettyHandler() {
             @Override
-            public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
+            protected void onDelete() throws IOException {
                 deleteIssued.set(TRUE);
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.flushBuffer();
+                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.delete("/");
