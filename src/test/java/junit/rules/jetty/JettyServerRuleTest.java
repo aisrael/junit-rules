@@ -10,10 +10,13 @@ package junit.rules.jetty;
 
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
@@ -62,5 +65,75 @@ public final class JettyServerRuleTest {
         assertEquals("<?xml version=\"1.0\"?>", in.readLine());
         assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
+    }
+    
+    
+    @Test
+    public void testHttpServerInterceptorPostMethod() throws Exception {
+        jettyServer.setHandler(new AbstractHandler() {
+
+            @Override
+            public void handle(final String target, final HttpServletRequest request,
+                    final HttpServletResponse response, final int dispatch) throws IOException,
+                    ServletException {
+            	BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+            	final PrintWriter out = response.getWriter();
+                out.println(reader.readLine());
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.flushBuffer();
+            }
+        });
+        final HttpURLConnection connection = jettyServer.post("/");
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        out.write("Hello World");
+        out.flush();
+        final BufferedReader in =
+                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        assertEquals("Hello World", in.readLine());
+        assertEquals(HTTP_OK, connection.getResponseCode());
+    }
+    
+    @Test
+    public void testHttpServerInterceptorPutMethod() throws Exception {
+        jettyServer.setHandler(new AbstractHandler() {
+        	
+            @Override
+            public void handle(final String target, final HttpServletRequest request,
+                    final HttpServletResponse response, final int dispatch) throws IOException,
+                    ServletException {
+            	BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+                final PrintWriter out = response.getWriter();
+                out.println(reader.readLine());
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.flushBuffer();
+            }
+        });
+        final HttpURLConnection connection = jettyServer.put("/");
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        out.write("Hello Again");
+        out.flush();
+        final BufferedReader in =
+                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        assertEquals("Hello Again", in.readLine());
+        assertEquals(HTTP_OK, connection.getResponseCode());
+    }
+    
+    @Test
+    public void testHttpServerInterceptorDeleteMethod() throws Exception {
+        final boolean[] deleteIssued = new boolean[]{false};
+        jettyServer.setHandler(new AbstractHandler() {
+        
+        	@Override
+        	public void handle(final String target, final HttpServletRequest request,
+                    final HttpServletResponse response, final int dispatch) throws IOException,
+                    ServletException {
+            	deleteIssued[0] = true;
+                response.setStatus(HttpServletResponse.SC_OK);
+                response.flushBuffer();
+            }
+        });
+        final HttpURLConnection connection = jettyServer.delete("/");
+        assertEquals(HTTP_OK, connection.getResponseCode());
+        assertTrue(deleteIssued[0]);
     }
 }

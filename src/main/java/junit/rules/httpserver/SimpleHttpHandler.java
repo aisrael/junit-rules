@@ -25,7 +25,7 @@ import com.sun.net.httpserver.HttpHandler;
  *
  * @author Alistair A. Israel
  */
-public abstract class SimpleHttpHandler implements HttpHandler {
+public class SimpleHttpHandler implements HttpHandler {
 
     /**
      * HTTP OK ({@value #HTTP_OK})
@@ -52,7 +52,15 @@ public abstract class SimpleHttpHandler implements HttpHandler {
         this.out = new ByteArrayOutputStream();
         this.pw = new PrintWriter(out);
         responseCodeSent = -1;
-        onGet();
+        if (exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+        	onGet();
+        } else if (exchange.getRequestMethod().equalsIgnoreCase("PUT")) {
+        	onPut();
+        } else if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+        	onPost();
+        } else if (exchange.getRequestMethod().equalsIgnoreCase("DELETE")) {
+        	onDelete();
+        }
         if (responseCodeSent == -1) {
             sendResponse(HTTP_OK);
         }
@@ -146,7 +154,29 @@ public abstract class SimpleHttpHandler implements HttpHandler {
      * @throws IOException
      *         on exception
      */
-    protected abstract void onGet() throws IOException;
+    protected void onGet() throws IOException {
+    }
+
+    /**
+     * @throws IOException
+     *         on exception
+     */
+    protected void onPut() throws IOException {
+    }
+
+    /**
+     * @throws IOException
+     *         on exception
+     */
+    protected void onPost() throws IOException {
+    }
+
+    /**
+     * @throws IOException
+     *         on exception
+     */
+    protected void onDelete() throws IOException {
+    }
 
     /**
      * @param responseCode
