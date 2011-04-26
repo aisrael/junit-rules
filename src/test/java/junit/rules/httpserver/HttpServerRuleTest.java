@@ -8,6 +8,8 @@
  */
 package junit.rules.httpserver;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +21,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+
+import junit.rules.util.SimpleReference;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -76,13 +80,13 @@ public final class HttpServerRuleTest {
             @Override
             protected void onPost() throws IOException {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(getRequestBody()));
-                getResponseWriter().write(reader.readLine());
+                getResponseWriter().write("Hello " + reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.post("/");
         final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-        out.write("Hello World");
+        out.write("World");
         out.flush();
         final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello World", in.readLine());
@@ -101,13 +105,13 @@ public final class HttpServerRuleTest {
             @Override
             protected void onPut() throws IOException {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(getRequestBody()));
-                getResponseWriter().write(reader.readLine());
+                getResponseWriter().write("Hello " + reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.put("/");
         final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-        out.write("Hello Again");
+        out.write("Again");
         out.flush();
         final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello Again", in.readLine());
@@ -122,16 +126,16 @@ public final class HttpServerRuleTest {
      */
     @Test
     public void testHttpServerRuleDeleteMethod() throws Exception {
-        final boolean[] deleteIssued = new boolean[] { false };
+        final SimpleReference<Boolean> deleteIssued = SimpleReference.to(FALSE);
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onDelete() throws IOException {
-                deleteIssued[0] = true;
+                deleteIssued.set(TRUE);
                 sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.delete("/");
         assertEquals(HTTP_OK, connection.getResponseCode());
-        assertTrue(deleteIssued[0]);
+        assertTrue(deleteIssued.get());
     }
 }

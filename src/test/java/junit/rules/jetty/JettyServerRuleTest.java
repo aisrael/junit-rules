@@ -8,6 +8,8 @@
  */
 package junit.rules.jetty;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +25,8 @@ import java.net.HttpURLConnection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import junit.rules.util.SimpleReference;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -52,7 +56,6 @@ public final class JettyServerRuleTest {
     @Test
     public void testJettyServerRule() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
-
             @Override
             public void handle(final String target, final HttpServletRequest request,
                     final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
@@ -109,7 +112,6 @@ public final class JettyServerRuleTest {
     @Test
     public void testJettyServerRulePutMethod() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
-
             @Override
             public void handle(final String target, final HttpServletRequest request,
                     final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
@@ -137,19 +139,18 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testJettyServerRuleDeleteMethod() throws Exception {
-        final boolean[] deleteIssued = new boolean[] { false };
+        final SimpleReference<Boolean> deleteIssued = SimpleReference.to(FALSE);
         jettyServer.setHandler(new AbstractHandler() {
-
             @Override
             public void handle(final String target, final HttpServletRequest request,
                     final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
-                deleteIssued[0] = true;
+                deleteIssued.set(TRUE);
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.flushBuffer();
             }
         });
         final HttpURLConnection connection = jettyServer.delete("/");
         assertEquals(HTTP_OK, connection.getResponseCode());
-        assertTrue(deleteIssued[0]);
+        assertTrue(deleteIssued.get());
     }
 }
