@@ -31,8 +31,6 @@ import junit.rules.util.SimpleReference;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mortbay.jetty.handler.AbstractHandler;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -46,8 +44,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class JettyServerRuleTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(JettyServerRule.class);
-
     // CHECKSTYLE:OFF
     @Rule
     public final JettyServerRule jettyServer = new JettyServerRule();
@@ -59,7 +55,6 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testJettyServerRule() throws Exception {
-        logger.debug("testJettyServerRule()");
         jettyServer.setHandler(new SimpleJettyHandler() {
             @Override
             protected void onGet() throws IOException {
