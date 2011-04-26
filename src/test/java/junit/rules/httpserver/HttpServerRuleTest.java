@@ -32,11 +32,14 @@ public final class HttpServerRuleTest {
     // CHECKSTYLE:OFF
     @Rule
     public final HttpServerRule httpServer = new HttpServerRule();
+
     // CHECKSTYLE:ON
 
     /**
+     * Test and illustrate basic usage (HTTP GET).
+     *
      * @throws Exception
-     *         on exception
+     *         should never happen
      */
     @Test
     public void testHttpServerInterceptor() throws Exception {
@@ -50,61 +53,76 @@ public final class HttpServerRuleTest {
             }
         });
         final HttpURLConnection connection = httpServer.get("/");
-        final BufferedReader in =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("<?xml version=\"1.0\"?>", in.readLine());
         assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
 
+    /**
+     * Test HTTP POST
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorPostMethod() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPost() throws IOException {
-            	BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
                 this.getResponseWriter().write(reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.post("/");
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         out.write("Hello World");
         out.flush();
-        final BufferedReader in =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello World", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
-    
+
+    /**
+     * Test HTTP PUT
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorPutMethod() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPut() throws IOException {
-            	BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
                 this.getResponseWriter().write(reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.put("/");
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         out.write("Hello Again");
         out.flush();
-        final BufferedReader in =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello Again", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
-    
+
+    /**
+     * Test HTTP DELETE
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorDeleteMethod() throws Exception {
-        final boolean[] deleteIssued = new boolean[]{false};
-    	httpServer.addHandler("/", new SimpleHttpHandler() {
+        final boolean[] deleteIssued = new boolean[] { false };
+        httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onDelete() throws IOException {
-            	deleteIssued[0] = true;
-            	sendResponse(HTTP_OK);
+                deleteIssued[0] = true;
+                sendResponse(HTTP_OK);
             }
         });
         final HttpURLConnection connection = httpServer.delete("/");

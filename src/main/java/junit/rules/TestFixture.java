@@ -49,7 +49,6 @@ public class TestFixture implements MethodRule {
      * @param method
      *        the target test method
      */
-    @SuppressWarnings("unused")
     protected void inspect(final Object target, final Method method) {
     }
 

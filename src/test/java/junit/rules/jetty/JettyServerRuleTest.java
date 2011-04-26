@@ -50,8 +50,7 @@ public final class JettyServerRuleTest {
 
             @Override
             public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException,
-                    ServletException {
+                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
                 final PrintWriter out = response.getWriter();
                 out.println("<?xml version=\"1.0\"?>");
                 out.println("<resource id=\"1234\" name=\"test\" />");
@@ -66,42 +65,50 @@ public final class JettyServerRuleTest {
         assertEquals("<resource id=\"1234\" name=\"test\" />", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
-    
-    
+
+    /**
+     * Test HTTP POST
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorPostMethod() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
 
             @Override
             public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException,
-                    ServletException {
-            	BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-            	final PrintWriter out = response.getWriter();
+                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+                final PrintWriter out = response.getWriter();
                 out.println(reader.readLine());
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.flushBuffer();
             }
         });
         final HttpURLConnection connection = jettyServer.post("/");
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         out.write("Hello World");
         out.flush();
-        final BufferedReader in =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello World", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
-    
+
+    /**
+     * Test HTTP PUT
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorPutMethod() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
-        	
+
             @Override
             public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException,
-                    ServletException {
-            	BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
                 final PrintWriter out = response.getWriter();
                 out.println(reader.readLine());
                 response.setStatus(HttpServletResponse.SC_OK);
@@ -109,25 +116,29 @@ public final class JettyServerRuleTest {
             }
         });
         final HttpURLConnection connection = jettyServer.put("/");
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+        final BufferedWriter out = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
         out.write("Hello Again");
         out.flush();
-        final BufferedReader in =
-                new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         assertEquals("Hello Again", in.readLine());
         assertEquals(HTTP_OK, connection.getResponseCode());
     }
-    
+
+    /**
+     * Test HTTP DELETE
+     *
+     * @throws Exception
+     *         should never happen
+     */
     @Test
     public void testHttpServerInterceptorDeleteMethod() throws Exception {
-        final boolean[] deleteIssued = new boolean[]{false};
+        final boolean[] deleteIssued = new boolean[] { false };
         jettyServer.setHandler(new AbstractHandler() {
-        
-        	@Override
-        	public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException,
-                    ServletException {
-            	deleteIssued[0] = true;
+
+            @Override
+            public void handle(final String target, final HttpServletRequest request,
+                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
+                deleteIssued[0] = true;
                 response.setStatus(HttpServletResponse.SC_OK);
                 response.flushBuffer();
             }
