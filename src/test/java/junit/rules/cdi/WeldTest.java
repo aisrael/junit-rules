@@ -8,6 +8,7 @@
  */
 package junit.rules.cdi;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.notification.Failure;
 
 /**
  * The Class WeldTest.
@@ -51,12 +54,24 @@ public final class WeldTest {
         }
     }
 
-        /**
+    /**
      * Test Weld {@code @Rule} using {@link UsesWeldTest}.
      */
     @Test
     public void testWeld() {
-        JUnitCore.runClasses(UsesWeldTest.class);
+        final Result result = JUnitCore.runClasses(UsesWeldTest.class);
+        final int failureCount = result.getFailureCount();
+        assertEquals(0, failureCount);
+        if (failureCount != 0) {
+            System.out.println("Encountered " + failureCount + " failures");
+            for (final Failure failure : result.getFailures()) {
+                System.out.println(failure);
+                final Throwable e = failure.getException();
+                if (e != null) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     /**
