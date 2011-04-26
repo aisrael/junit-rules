@@ -31,6 +31,8 @@ import junit.rules.util.SimpleReference;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mortbay.jetty.handler.AbstractHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <p>
@@ -44,6 +46,8 @@ import org.mortbay.jetty.handler.AbstractHandler;
  */
 public final class JettyServerRuleTest {
 
+    private static final Logger logger = LoggerFactory.getLogger(JettyServerRule.class);
+
     // CHECKSTYLE:OFF
     @Rule
     public final JettyServerRule jettyServer = new JettyServerRule();
@@ -55,15 +59,14 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testJettyServerRule() throws Exception {
-        jettyServer.setHandler(new AbstractHandler() {
+        logger.debug("testJettyServerRule()");
+        jettyServer.setHandler(new SimpleJettyHandler() {
             @Override
-            public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
-                final PrintWriter out = response.getWriter();
+            protected void onGet() throws IOException {
+                final PrintWriter out = getResponseWriter();
                 out.println("<?xml version=\"1.0\"?>");
                 out.println("<resource id=\"1234\" name=\"test\" />");
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.flushBuffer();
+                sendResponse(HttpServletResponse.SC_OK);
             }
         });
 
@@ -82,16 +85,13 @@ public final class JettyServerRuleTest {
      */
     @Test
     public void testJettyServerRulePostMethod() throws Exception {
-        jettyServer.setHandler(new AbstractHandler() {
-
+        jettyServer.setHandler(new SimpleJettyHandler() {
             @Override
-            public void handle(final String target, final HttpServletRequest request,
-                    final HttpServletResponse response, final int dispatch) throws IOException, ServletException {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-                final PrintWriter out = response.getWriter();
+            protected void onPost() throws IOException {
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(request().getInputStream()));
+                final PrintWriter out = getResponseWriter();
                 out.println(reader.readLine());
-                response.setStatus(HttpServletResponse.SC_OK);
-                response.flushBuffer();
+                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.post("/");

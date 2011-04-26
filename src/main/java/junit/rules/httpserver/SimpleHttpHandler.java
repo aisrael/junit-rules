@@ -33,6 +33,26 @@ import com.sun.net.httpserver.HttpHandler;
 public class SimpleHttpHandler implements HttpHandler {
 
     /**
+     * {@value #GET}
+     */
+    private static final String GET = "GET";
+
+    /**
+     * {@value #POST}
+     */
+    private static final String POST = "POST";
+
+    /**
+     * {@value #PUT}
+     */
+    private static final String PUT = "PUT";
+
+    /**
+     * {@value #DELETE}
+     */
+    private static final String DELETE = "DELETE";
+
+    /**
      * HTTP OK ({@value #HTTP_OK})
      *
      * @see HttpURLConnection#HTTP_OK
@@ -58,13 +78,14 @@ public class SimpleHttpHandler implements HttpHandler {
         this.out = new ByteArrayOutputStream();
         this.pw = new PrintWriter(out);
         responseCodeSent = -1;
-        if (exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+        final String requestMethod = exchange.getRequestMethod();
+        if (GET.equalsIgnoreCase(requestMethod)) {
             onGet();
-        } else if (exchange.getRequestMethod().equalsIgnoreCase("PUT")) {
-            onPut();
-        } else if (exchange.getRequestMethod().equalsIgnoreCase("POST")) {
+        } else if (POST.equalsIgnoreCase(requestMethod)) {
             onPost();
-        } else if (exchange.getRequestMethod().equalsIgnoreCase("DELETE")) {
+        } else if (PUT.equalsIgnoreCase(requestMethod)) {
+            onPut();
+        } else if (DELETE.equalsIgnoreCase(requestMethod)) {
             onDelete();
         }
         if (responseCodeSent == -1) {
@@ -159,14 +180,14 @@ public class SimpleHttpHandler implements HttpHandler {
      * @throws IOException
      *         on exception
      */
-    protected void onPut() throws IOException {
+    protected void onPost() throws IOException {
     }
 
     /**
      * @throws IOException
      *         on exception
      */
-    protected void onPost() throws IOException {
+    protected void onPut() throws IOException {
     }
 
     /**

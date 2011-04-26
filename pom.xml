@@ -20,6 +20,27 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.5.10</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>log4j</artifactId>
+          <groupId>log4j</groupId>
+        </exclusion>
+      </exclusions>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.16</version>
+      <type>jar</type>
+      <scope>test</scope>
+    </dependency>
+
     <!-- JUnit, http://www.junit.org -->
     <dependency>
       <groupId>junit</groupId>
@@ -28,9 +49,7 @@
       <scope>compile</scope>
     </dependency>
 
-    <!--
-      3rd-party libraries
-    -->
+    <!-- 3rd-party libraries -->
     <!-- JBoss Weld, for CDI -->
     <dependency>
       <groupId>org.jboss.weld.se</groupId>
@@ -38,7 +57,7 @@
       <version>1.1.0.Final</version>
       <optional>true</optional>
     </dependency>
-    
+
     <!-- Jetty HTTP Server -->
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
@@ -48,19 +67,17 @@
       <optional>true</optional>
     </dependency>
 
-    <!--
-      Hibernate
-    -->
+    <!-- Hibernate -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-core</artifactId>
       <version>3.3.2.GA</version>
       <scope>compile</scope>
       <exclusions>
-      	<exclusion>
-      		<artifactId>slf4j-api</artifactId>
-      		<groupId>org.slf4j</groupId>
-      	</exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
       </exclusions>
       <optional>true</optional>
     </dependency>
@@ -70,10 +87,10 @@
       <version>3.4.0.GA</version>
       <scope>compile</scope>
       <exclusions>
-      	<exclusion>
-      		<artifactId>slf4j-api</artifactId>
-      		<groupId>org.slf4j</groupId>
-      	</exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
       </exclusions>
       <optional>true</optional>
     </dependency>
@@ -94,21 +111,19 @@
       <version>2.4.6</version>
       <scope>compile</scope>
       <exclusions>
-      	<exclusion>
-      		<artifactId>slf4j-api</artifactId>
-      		<groupId>org.slf4j</groupId>
-      	</exclusion>
-      	<exclusion>
-      		<artifactId>junit</artifactId>
-      		<groupId>junit</groupId>
-      	</exclusion>
+        <exclusion>
+          <artifactId>slf4j-api</artifactId>
+          <groupId>org.slf4j</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit</artifactId>
+          <groupId>junit</groupId>
+        </exclusion>
       </exclusions>
       <optional>true</optional>
     </dependency>
 
-    <!--
-      Logging
-    -->
+    <!-- Logging -->
     <!-- SLF4J implementation is used by Hibernate, DbUnit, so we use it too -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -116,30 +131,8 @@
       <version>1.5.10</version>
       <scope>compile</scope>
     </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.5.10</version>
-      <scope>test</scope>
-      <exclusions>
-      	<exclusion>
-      		<artifactId>log4j</artifactId>
-      		<groupId>log4j</groupId>
-      	</exclusion>
-      </exclusions>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.16</version>
-        <type>jar</type>
-        <scope>test</scope>
-    </dependency>
 
-    <!--
-      Foundations
-    -->
+    <!-- Foundations -->
     <!-- JPA -->
     <dependency>
       <groupId>javax.persistence</groupId>
@@ -150,12 +143,16 @@
   </dependencies>
 
   <repositories>
-  <repository>
-        <id>org.jboss.repositories.public-jboss</id>
-        <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
-        <releases><enabled>true</enabled></releases>
-        <snapshots><enabled>false</enabled></snapshots>        
-     </repository>
+    <repository>
+      <id>org.jboss.repositories.public-jboss</id>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <build>
