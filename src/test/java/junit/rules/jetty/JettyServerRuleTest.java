@@ -29,7 +29,12 @@ import org.junit.Test;
 import org.mortbay.jetty.handler.AbstractHandler;
 
 /**
- * JUnit test case for {@link JettyServerRule}
+ * <p>
+ * JUnit test case for {@link JettyServerRule}.
+ * </p>
+ * <p>
+ * With contributions by <a href="https://github.com/beobal">Sam Tunnicliffe</a>.
+ * </p>
  *
  * @author Alistair A. Israel
  */

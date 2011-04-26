@@ -17,13 +17,19 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
 import org.junit.Rule;
 import org.junit.Test;
 
 /**
+ * <p>
  * JUnit test case for {@link HttpServerRule}.
+ * </p>
+ * <p>
+ * With contributions by <a href="https://github.com/beobal">Sam Tunnicliffe</a>.
+ * </p>
  *
  * @author Alistair A. Israel
  */
@@ -32,7 +38,6 @@ public final class HttpServerRuleTest {
     // CHECKSTYLE:OFF
     @Rule
     public final HttpServerRule httpServer = new HttpServerRule();
-
     // CHECKSTYLE:ON
 
     /**
@@ -44,11 +49,11 @@ public final class HttpServerRuleTest {
     @Test
     public void testHttpServerRule() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
-
             @Override
             protected void onGet() throws IOException {
-                getResponseWriter().println("<?xml version=\"1.0\"?>");
-                getResponseWriter().println("<resource id=\"1234\" name=\"test\" />");
+                final PrintWriter out = getResponseWriter();
+                out.println("<?xml version=\"1.0\"?>");
+                out.println("<resource id=\"1234\" name=\"test\" />");
                 sendResponse(HTTP_OK);
             }
         });
@@ -70,8 +75,8 @@ public final class HttpServerRuleTest {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPost() throws IOException {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
-                this.getResponseWriter().write(reader.readLine());
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(getRequestBody()));
+                getResponseWriter().write(reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
@@ -95,8 +100,8 @@ public final class HttpServerRuleTest {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPut() throws IOException {
-                final BufferedReader reader = new BufferedReader(new InputStreamReader(this.getRequestBody()));
-                this.getResponseWriter().write(reader.readLine());
+                final BufferedReader reader = new BufferedReader(new InputStreamReader(getRequestBody()));
+                getResponseWriter().write(reader.readLine());
                 sendResponse(HTTP_OK);
             }
         });
