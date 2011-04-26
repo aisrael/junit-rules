@@ -96,4 +96,56 @@ public class JettyServerRule extends BaseHttpServerRule {
         return connection;
     }
 
+        /**
+     * @param path
+     *        the URI path to POST to
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    @Override
+    public final HttpURLConnection post(final String path) throws IOException {
+    	final InetSocketAddress address = new InetSocketAddress(getPort());
+        final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        connection.connect();
+        return connection;
+    }
+
+    /**
+     * @param path
+     *        the URI path to PUT to
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    @Override
+    public final HttpURLConnection put(final String path) throws IOException {
+    	final InetSocketAddress address = new InetSocketAddress(getPort());
+        final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setDoOutput(true);
+        connection.setRequestMethod("PUT");
+        connection.connect();
+        return connection;
+    }
+
+    /**
+     * @param path
+     *        the URI path to DELETE
+     * @return the HttpURLConnection
+     * @throws IOException
+     *         on exception
+     */
+    @Override
+    public final HttpURLConnection delete(final String path) throws IOException {
+    	final InetSocketAddress address = new InetSocketAddress(getPort());
+        final URL url = new URL("http://" + address.getHostName() + ":" + address.getPort() + path);
+        final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("DELETE");
+        connection.connect();
+        return connection;
+    }
 }
