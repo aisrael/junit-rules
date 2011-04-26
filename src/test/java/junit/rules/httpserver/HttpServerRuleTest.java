@@ -42,7 +42,7 @@ public final class HttpServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptor() throws Exception {
+    public void testHttpServerRule() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
 
             @Override
@@ -66,7 +66,7 @@ public final class HttpServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorPostMethod() throws Exception {
+    public void testHttpServerRulePostMethod() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPost() throws IOException {
@@ -91,7 +91,7 @@ public final class HttpServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorPutMethod() throws Exception {
+    public void testHttpServerRulePutMethod() throws Exception {
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override
             protected void onPut() throws IOException {
@@ -116,7 +116,7 @@ public final class HttpServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorDeleteMethod() throws Exception {
+    public void testHttpServerRuleDeleteMethod() throws Exception {
         final boolean[] deleteIssued = new boolean[] { false };
         httpServer.addHandler("/", new SimpleHttpHandler() {
             @Override

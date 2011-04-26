@@ -45,7 +45,7 @@ public final class JettyServerRuleTest {
      *         on exception
      */
     @Test
-    public void testHttpServerInterceptor() throws Exception {
+    public void testJettyServerRule() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
 
             @Override
@@ -73,7 +73,7 @@ public final class JettyServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorPostMethod() throws Exception {
+    public void testJettyServerRulePostMethod() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
 
             @Override
@@ -102,7 +102,7 @@ public final class JettyServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorPutMethod() throws Exception {
+    public void testJettyServerRulePutMethod() throws Exception {
         jettyServer.setHandler(new AbstractHandler() {
 
             @Override
@@ -131,7 +131,7 @@ public final class JettyServerRuleTest {
      *         should never happen
      */
     @Test
-    public void testHttpServerInterceptorDeleteMethod() throws Exception {
+    public void testJettyServerRuleDeleteMethod() throws Exception {
         final boolean[] deleteIssued = new boolean[] { false };
         jettyServer.setHandler(new AbstractHandler() {
 
