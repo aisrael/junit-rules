@@ -10,6 +10,7 @@ package junit.rules.jpa.hibernate;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import junit.rules.dbunit.Fixtures;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 
 import com.example.ejb3.beans.WidgetBean;
 import com.example.model.Widget;
@@ -72,7 +74,8 @@ public final class DerbyHibernateTestCaseTest {
      */
     @Test
     public void testRunFirst() {
-        JUnitCore.runClasses(FirstTest.class);
+        final Result results = JUnitCore.runClasses(FirstTest.class);
+        assertTrue(results.wasSuccessful());
     }
 
     /**
@@ -101,7 +104,8 @@ public final class DerbyHibernateTestCaseTest {
      */
     @Test
     public void testRunFirstAndSecond() {
-        JUnitCore.runClasses(FirstTest.class, SecondTest.class);
+        final Result results = JUnitCore.runClasses(FirstTest.class, SecondTest.class);
+        assertTrue(results.wasSuccessful());
     }
 
 }

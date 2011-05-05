@@ -44,7 +44,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DerbyHibernateTestCase {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
+    private static final Logger logger = LoggerFactory.getLogger(HibernatePersistenceContext.class);
 
     private static final ThreadLocal<EntityManagerFactory> ENTITY_MANAGER_FACTORY = new ThreadLocal<EntityManagerFactory>();
 
@@ -71,7 +71,7 @@ public class DerbyHibernateTestCase {
             DriverManager.getConnection(JDBC_DERBY_URL + ";shutdown=true");
         } catch (final SQLException e) {
             if (e.getErrorCode() == 45000 && "08006".equals(e.getSQLState())) {
-                LOGGER.info("Derby shut down normally");
+                logger.info("Derby shut down normally");
             } else {
                 // if the error code or SQLState is different, we have
                 // an unexpected exception (shutdown failed)
@@ -92,7 +92,7 @@ public class DerbyHibernateTestCase {
                 if (type.equals(EntityManager.class)) {
                     set(field).of(object).to(entityManager);
                 } else {
-                    LOGGER.warn("Found field \"{}\" annotated with @PersistenceContext " + "but is of type {}", field
+                    logger.warn("Found field \"{}\" annotated with @PersistenceContext " + "but is of type {}", field
                             .getName(), type.getName());
                 }
             }
@@ -104,7 +104,7 @@ public class DerbyHibernateTestCase {
                 if (nParameters == 0) {
                     invoke(method).on(object);
                 } else {
-                    LOGGER.warn("Found method \"{}\" annotated @PostConstruct "
+                    logger.warn("Found method \"{}\" annotated @PostConstruct "
                             + "but don't know how to invoke with {} parameters", method.getName(), nParameters);
                 }
             }
@@ -122,7 +122,7 @@ public class DerbyHibernateTestCase {
         jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), JDBC_DERBY_URL);
         final List<String> fixtureNames = FixturesUtil.getFixtureNames(getClass());
         if (fixtureNames.isEmpty()) {
-            LOGGER.warn("No fixtures to load! Specify fixtures using @Fixtures.");
+            logger.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
             loadFixtures(fixtureNames);
         }
@@ -140,7 +140,7 @@ public class DerbyHibernateTestCase {
         final IDataSet[] dataSets = DbUnitUtil.loadDataSets(fixtureNames);
 
         if (dataSets.length == 0) {
-            LOGGER.warn("Found 0 data sets!");
+            logger.warn("Found 0 data sets!");
         } else {
             final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets);
             jdbcDatabaseTester.setDataSet(compositeDataSet);
