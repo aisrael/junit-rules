@@ -22,7 +22,7 @@ public final class DerbyHibernateUtil {
     /**
      * {@value #JDBC_DERBY_URL}
      */
-    public static final String JDBC_DERBY_URL = "jdbc:derby:target/DerbyDB";
+    public static final String JDBC_DERBY_URL = "jdbc:derby:test";
 
     /**
      *

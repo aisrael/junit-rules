@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class DbUnitTestFixtures extends TestFixture {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DbUnitTestFixtures.class);
+    private static final Logger logger = LoggerFactory.getLogger(DbUnitTestFixtures.class);
 
     private List<String> fixtureNames;
 
@@ -48,9 +48,9 @@ public class DbUnitTestFixtures extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
-        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), "jdbc:derby:target/DerbyDB");
+        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), "jdbc:derby:test");
         if (fixtureNames.isEmpty()) {
-            LOGGER.warn("No fixtures to load! Specify fixtures using @Fixtures.");
+            logger.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
             DbUnitUtil.loadDataSets(fixtureNames);
         }

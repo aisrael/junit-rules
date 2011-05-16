@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
  */
 public class HibernatePersistenceContext extends TestFixture implements junit.rules.jpa.PersistenceContext {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(HibernatePersistenceContext.class);
+    private static final Logger logger = LoggerFactory.getLogger(HibernatePersistenceContext.class);
 
     private final List<String> fixtureNames = new ArrayList<String>();
 
@@ -65,6 +65,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
      * @param object
      *        an object to which we will apply EJB 3.0 style @PersistenceContext and @PostConstruct handling
      */
+    @Override
     public final void injectAndPostConstruct(final Object object) {
         final Class<? extends Object> clazz = object.getClass();
         for (final Field field : clazz.getDeclaredFields()) {
@@ -73,7 +74,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
                 if (type.equals(EntityManager.class)) {
                     set(field).of(object).to(entityManager);
                 } else {
-                    LOGGER.warn("Found field \"{}\" annotated with @PersistenceContext " + "but is of type {}", field
+                    logger.warn("Found field \"{}\" annotated with @PersistenceContext but is of type {}", field
                             .getName(), type.getName());
                 }
             }
@@ -85,7 +86,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
                 if (nParameters == 0) {
                     invoke(method).on(object);
                 } else {
-                    LOGGER.warn("Found method \"{}\" annotated @PostConstruct "
+                    logger.warn("Found method \"{}\" annotated @PostConstruct "
                             + "but don't know how to invoke with {} parameters", method.getName(), nParameters);
                 }
             }
@@ -127,7 +128,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
     protected final void setUp() throws Throwable {
         jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), DerbyHibernateUtil.JDBC_DERBY_URL);
         if (fixtureNames.isEmpty()) {
-            LOGGER.warn("No fixtures to load! Specify fixtures using @Fixtures.");
+            logger.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
             loadFixtures();
         }
@@ -143,7 +144,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
         final List<IDataSet> dataSets = new ArrayList<IDataSet>();
 
         for (final String fixtureName : fixtureNames) {
-            LOGGER.trace("Attempting to load database fixture \"" + fixtureName + "\"");
+            logger.trace("Attempting to load database fixture \"" + fixtureName + "\"");
             final IDataSet dataSet = attemptToLoadFixture(fixtureName);
             if (dataSet != null) {
                 dataSets.add(dataSet);
@@ -151,7 +152,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
         }
 
         if (dataSets.isEmpty()) {
-            LOGGER.warn("Found 0 data sets!");
+            logger.warn("Found 0 data sets!");
         } else {
             final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets.toArray(new IDataSet[dataSets
                     .size()]));
@@ -179,7 +180,7 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
                 in.close();
             }
         } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
+            logger.warn(e.getMessage(), e);
         }
         return dataSet;
     }

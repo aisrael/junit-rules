@@ -43,8 +43,8 @@ public final class DerbyDataSourceRuleTest {
             try {
                 final ResultSet rs = ps.executeQuery("VALUES CURRENT_DATE");
                 rs.next();
-                final Date i = rs.getDate(1);
-                System.out.println(i);
+                final Date today = rs.getDate(1);
+                assertNotNull(today);
             } finally {
                 ps.close();
             }

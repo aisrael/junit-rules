@@ -11,6 +11,8 @@ package junit.rules.derby;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
@@ -35,13 +37,20 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     private DataSource dataSource;
 
     /**
-     * Instantiates a new derby database test fixture.
+     * Instantiates a new Derby database test fixture.
      *
      * @param databaseName
      *        the database name
      */
     public DerbyDataSourceRule(final String databaseName) {
         this.databaseName = databaseName;
+    }
+
+    /**
+     * Instantiates a new Derby database test fixture with the default name ({@code "test"}).
+     */
+    public DerbyDataSourceRule() {
+        this("test");
     }
 
     /**
@@ -54,7 +63,8 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     protected final void setUp() throws Throwable {
         logger.debug("setUp()");
         final String jdbcUrl = constructJdbcUrl();
-        DriverManager.getConnection(jdbcUrl + ";create=true");
+        logger.debug("Using JDBC URL: " + jdbcUrl);
+        DriverManager.getConnection(jdbcUrl);
 
         final DriverManagerDataSource ds = new DriverManagerDataSource();
         ds.setJdbcUrl(jdbcUrl);
@@ -66,7 +76,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @return the JDBC URL to use
      */
     private String constructJdbcUrl() {
-        return "jdbc:derby:memory:" + databaseName;
+        return "jdbc:derby:memory:" + databaseName + ";create=true";
     }
 
     /**
@@ -147,6 +157,37 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     @Override
     public final <T> T unwrap(final Class<T> arg0) throws SQLException {
         return dataSource.unwrap(arg0);
+    }
+
+    /**
+     * Don't know where else to put it for now.
+     *
+     * @param tableName
+     *        the table name to count
+     * @return the count
+     */
+    public final int count(final String tableName) {
+        try {
+            final Connection conn = dataSource.getConnection();
+            try {
+                final PreparedStatement ps = conn.prepareStatement("SELECT count(*) FROM " + tableName);
+                try {
+                    final ResultSet rs = ps.executeQuery();
+                    try {
+                        rs.next();
+                        return rs.getInt(1);
+                    } finally {
+                        rs.close();
+                    }
+                } finally {
+                    ps.close();
+                }
+            } finally {
+                conn.close();
+            }
+        } catch (final SQLException e) {
+            throw new AssertionError(e);
+        }
     }
 
 }
