@@ -38,7 +38,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     private DataSource dataSource;
 
     /**
-     * Instantiates a new Derby DataSource rules.
+     * Instantiates a new Derby DataSource rule.
      *
      * @param databaseName
      *        the database name
