@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import javax.sql.DataSource;
 
@@ -157,6 +158,30 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     @Override
     public final <T> T unwrap(final Class<T> arg0) throws SQLException {
         return dataSource.unwrap(arg0);
+    }
+
+    /**
+     * @param sql
+     *        the SQL to execute
+     * @return the number of rows affected
+     */
+    public final int execute(final String sql) {
+        try {
+            final Connection conn = dataSource.getConnection();
+            try {
+                final Statement statement = conn.createStatement();
+                try {
+                    return statement.executeUpdate(sql);
+                } finally {
+                    statement.close();
+                }
+            } finally {
+                conn.close();
+            }
+        } catch (final SQLException e) {
+            throw new AssertionError(e);
+        }
+
     }
 
     /**
