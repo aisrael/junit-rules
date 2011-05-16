@@ -38,7 +38,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     private DataSource dataSource;
 
     /**
-     * Instantiates a new Derby database test fixture.
+     * Instantiates a new Derby DataSource rules.
      *
      * @param databaseName
      *        the database name
@@ -48,7 +48,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     }
 
     /**
-     * Instantiates a new Derby database test fixture with the default name ({@code "test"}).
+     * Instantiates a new Derby DataSource rule with the default name ({@code "test"}).
      */
     public DerbyDataSourceRule() {
         this("test");
@@ -96,8 +96,8 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @see javax.sql.DataSource#getConnection(java.lang.String, java.lang.String)
      */
     @Override
-    public final Connection getConnection(final String arg0, final String arg1) throws SQLException {
-        return dataSource.getConnection(arg0, arg1);
+    public final Connection getConnection(final String username, final String password) throws SQLException {
+        return dataSource.getConnection(username, password);
     }
 
     /**
@@ -123,21 +123,11 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
     /**
      * {@inheritDoc}
      *
-     * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
-     */
-    @Override
-    public final boolean isWrapperFor(final Class<?> arg0) throws SQLException {
-        return dataSource.isWrapperFor(arg0);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
      * @see javax.sql.CommonDataSource#setLogWriter(java.io.PrintWriter)
      */
     @Override
-    public final void setLogWriter(final PrintWriter arg0) throws SQLException {
-        dataSource.setLogWriter(arg0);
+    public final void setLogWriter(final PrintWriter out) throws SQLException {
+        dataSource.setLogWriter(out);
     }
 
     /**
@@ -146,8 +136,18 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @see javax.sql.CommonDataSource#setLoginTimeout(int)
      */
     @Override
-    public final void setLoginTimeout(final int arg0) throws SQLException {
-        dataSource.setLoginTimeout(arg0);
+    public final void setLoginTimeout(final int seconds) throws SQLException {
+        dataSource.setLoginTimeout(seconds);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @see java.sql.Wrapper#isWrapperFor(java.lang.Class)
+     */
+    @Override
+    public final boolean isWrapperFor(final Class<?> iface) throws SQLException {
+        return dataSource.isWrapperFor(iface);
     }
 
     /**
@@ -156,8 +156,8 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @see java.sql.Wrapper#unwrap(java.lang.Class)
      */
     @Override
-    public final <T> T unwrap(final Class<T> arg0) throws SQLException {
-        return dataSource.unwrap(arg0);
+    public final <T> T unwrap(final Class<T> iface) throws SQLException {
+        return dataSource.unwrap(iface);
     }
 
     /**
