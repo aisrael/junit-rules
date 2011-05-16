@@ -22,8 +22,6 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 
-import javax.servlet.http.HttpServletResponse;
-
 import junit.rules.util.SimpleReference;
 
 import org.junit.Rule;
@@ -59,7 +57,6 @@ public final class JettyServerRuleTest {
                 final PrintWriter out = getResponseWriter();
                 out.println("<?xml version=\"1.0\"?>");
                 out.println("<resource id=\"1234\" name=\"test\" />");
-                sendResponse(HttpServletResponse.SC_OK);
             }
         });
 
@@ -84,7 +81,6 @@ public final class JettyServerRuleTest {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(request().getInputStream()));
                 final PrintWriter out = getResponseWriter();
                 out.println(reader.readLine());
-                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.post("/");
@@ -110,7 +106,6 @@ public final class JettyServerRuleTest {
                 final BufferedReader reader = new BufferedReader(new InputStreamReader(request().getInputStream()));
                 final PrintWriter out = getResponseWriter();
                 out.println(reader.readLine());
-                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.put("/");
@@ -135,7 +130,6 @@ public final class JettyServerRuleTest {
             @Override
             protected void onDelete() throws IOException {
                 deleteIssued.set(TRUE);
-                sendResponse(HttpServletResponse.SC_OK);
             }
         });
         final HttpURLConnection connection = jettyServer.delete("/");
