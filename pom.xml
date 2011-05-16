@@ -217,12 +217,8 @@
         <configuration>
           <systemProperties>
             <property>
-              <name>derby.stream.error.file</name>
-              <value>${project.build.directory}/derby.log</value>
-            </property>
-            <property>
-              <name>log4j.configuration</name>
-              <value>log4j.properties</value>
+              <name>derby.system.home</name>
+              <value>${project.build.directory}</value>
             </property>
           </systemProperties>
         </configuration>
