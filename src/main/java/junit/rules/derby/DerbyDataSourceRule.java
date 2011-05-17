@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
  * It's a JUnit {@link org.junit.Rule} that also masquerades as a JDBC {@link DataSource}.
  *
  * @author Alistair.Israel
+ * @since 0.5
  */
 public class DerbyDataSourceRule extends TestFixture implements DataSource {
 
@@ -164,6 +165,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @param sql
      *        the SQL to execute
      * @return the number of rows affected
+     * @since 0.5.1
      */
     public final int execute(final String sql) {
         try {
@@ -190,6 +192,7 @@ public class DerbyDataSourceRule extends TestFixture implements DataSource {
      * @param tableName
      *        the table name to count
      * @return the count
+     * @since 0.5.1
      */
     public final int count(final String tableName) {
         try {
