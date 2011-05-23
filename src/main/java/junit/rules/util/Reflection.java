@@ -11,6 +11,7 @@ package junit.rules.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Iterator;
 
 /**
  * <p>
@@ -179,8 +180,7 @@ public final class Reflection {
      *        any parameters to the method
      * @return any return value
      */
-    public static Object quietlyInvokeMethod(final Method method, final Object object,
-            final Object... params) {
+    public static Object quietlyInvokeMethod(final Method method, final Object object, final Object... params) {
         try {
             final boolean accessible = method.isAccessible();
             if (!accessible) {
@@ -200,5 +200,34 @@ public final class Reflection {
         } catch (final InvocationTargetException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+    }
+
+    /**
+     * @param clazz
+     *        the class
+     * @return an iterable for the class hierarchy
+     */
+    public static Iterable<Class<?>> iterateClassHierarchy(final Class<?> clazz) {
+        return new Iterable<Class<?>>() {
+            @Override
+            public Iterator<Class<?>> iterator() {
+                return new ReadOnlyIterator<Class<?>>() {
+
+                    private Class<?> cl = clazz;
+
+                    @Override
+                    public boolean hasNext() {
+                        return cl != null && cl != Class.class;
+                    }
+
+                    @Override
+                    public Class<?> next() {
+                        final Class<?> next = cl;
+                        cl = cl.getSuperclass();
+                        return next;
+                    }
+                };
+            }
+        };
     }
 }
