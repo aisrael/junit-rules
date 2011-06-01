@@ -91,7 +91,7 @@ public class StubJndiContext extends TestFixture {
                 NamingManager.setInitialContextFactoryBuilder(new StubContextFactoryBuilder());
             } catch (final NamingException e) {
                 throw new RuntimeException(e.getClass().getCanonicalName()
-                        + " attempting to activate MockJndiContextBuilder", e);
+                        + " attempting to activate StubJndiContextBuilder", e);
             }
         }
     }
@@ -272,10 +272,10 @@ public class StubJndiContext extends TestFixture {
         @Override
         public void rename(final String oldName, final String newName) throws NamingException {
             if (!boundObjects.containsKey(oldName)) {
-                throw new NamingException("MockJndiContext namme \"" + oldName + "\" not bound!");
+                throw new NamingException("StubJndiContext namme \"" + oldName + "\" not bound!");
             }
             if (boundObjects.containsKey(newName)) {
-                throw new NamingException("MockJndiContext name \"" + oldName + "\" already bound to object of type: "
+                throw new NamingException("StubJndiContext name \"" + oldName + "\" already bound to object of type: "
                         + boundObjects.get(newName).getClass().getCanonicalName());
             }
 
@@ -446,7 +446,7 @@ public class StubJndiContext extends TestFixture {
      */
     public static UnsupportedOperationException notSupported() {
         final StackTraceElement[] unwound = unwindStackTrace(Thread.currentThread().getStackTrace());
-        final UnsupportedOperationException e = new UnsupportedOperationException("MockJndiContext."
+        final UnsupportedOperationException e = new UnsupportedOperationException("StubJndiContext."
                 + unwound[0].getMethodName() + " is not supported!");
         e.setStackTrace(unwound);
         return e;
@@ -461,7 +461,7 @@ public class StubJndiContext extends TestFixture {
         final int len = st.length;
 
         int i = 0;
-        // Unwind up to MockJndiContext
+        // Unwind up to StubJndiContext
         final String stubJndiContext = StubJndiContext.class.getName();
         while (i < len && !st[i].getClassName().equals(stubJndiContext)) {
             ++i;
