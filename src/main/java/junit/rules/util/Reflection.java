@@ -158,7 +158,7 @@ public final class Reflection {
          * @return any return value
          */
         public final Object on(final Object object, final Object... params) {
-            return quietlyInvokeMethod(method, object, params);
+            return quietlyInvokeMethod(object, method, params);
         }
     }
 
@@ -171,16 +171,39 @@ public final class Reflection {
         return new MethodInvoker(method);
     }
 
+
     /**
-     * @param method
-     *        the method to invoke
+     * @param clazz
+     *        the {@link Class}
+     * @param methodName
+     *        the name of the method we're interested in
+     * @param parameterTypes
+     *        the parameter types
+     * @return the {@link Method} found, or {@code null} if no matching method is found
+     * @since 0.5.1
+     */
+    public static Method quietlyGetMethod(final Class<?> clazz, final String methodName,
+            final Class<?>... parameterTypes) {
+        try {
+            return clazz.getMethod(methodName, parameterTypes);
+        } catch (final SecurityException e) {
+            throw new RuntimeException("SecurityException attempting to retrieve method \"" + methodName
+                    + "\" from class " + clazz.getName(), e);
+        } catch (final NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    /**
      * @param object
      *        the object to invoke the method on
+     * @param method
+     *        the method to invoke
      * @param params
      *        any parameters to the method
      * @return any return value
      */
-    public static Object quietlyInvokeMethod(final Method method, final Object object, final Object... params) {
+    public static Object quietlyInvokeMethod(final Object object, final Method method, final Object... params) {
         try {
             final boolean accessible = method.isAccessible();
             if (!accessible) {
