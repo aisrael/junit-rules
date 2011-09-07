@@ -1,5 +1,10 @@
 /**
+ * junit-rules: JUnit Rules Library
  *
+ * Copyright (c) 2009-2011 by Alistair A. Israel.
+ * This software is made available under the terms of the MIT License.
+ *
+ * Created Sep 5, 2011
  */
 package junit.rules;
 
@@ -23,7 +28,7 @@ public class ExpectedExceptions implements TestRule {
      * @see org.junit.rules.TestRule#apply(org.junit.runners.model.Statement, org.junit.runner.Description)
      */
     @Override
-    public Statement apply(final Statement base, final Description description) {
+    public final Statement apply(final Statement base, final Description description) {
         final Class<?> testClass = description.getTestClass();
         final String methodName = description.getMethodName();
         try {
@@ -41,10 +46,10 @@ public class ExpectedExceptions implements TestRule {
                 public void evaluate() throws Throwable {
                     try {
                         base.evaluate();
+                        fail("Expected exception " + expected.getName() + " not thrown!");
                     } catch (final Throwable t) {
                         if (!expected.isInstance(t)) {
                             throw t;
-//                            fail("Expecting " + expected.getName() + ", got " + t.getClass().getName());
                         }
                     }
                 }
