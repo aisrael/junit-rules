@@ -14,9 +14,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import junit.rules.TestFixture;
+import junit.rules.util.Reflection;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +36,13 @@ public class DbUnitTestFixtures extends TestFixture {
     /**
      * {@inheritDoc}
      *
-     * @see junit.rules.TestFixture#inspect(java.lang.Object, java.lang.reflect.Method)
+     * @see junit.rules.TestFixture#inspect(org.junit.runner.Description)
      */
     @Override
-    protected final void inspect(final Object target, final Method method) {
-        fixtureNames = getFixtureNames(target.getClass(), method);
+    protected final void inspect(final Description description) {
+        final Class<?> testClass = description.getTestClass();
+        final Method method = Reflection.quietlyGetMethod(testClass, description.getMethodName());
+        fixtureNames = getFixtureNames(testClass, method);
     }
 
     /**

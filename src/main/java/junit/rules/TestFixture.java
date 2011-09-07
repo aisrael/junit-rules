@@ -8,16 +8,14 @@
  */
 package junit.rules;
 
-import java.lang.reflect.Method;
-
-import org.junit.rules.MethodRule;
-import org.junit.runners.model.FrameworkMethod;
+import org.junit.rules.TestRule;
+import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
 
 /**
  * @author Alistair A. Israel
  */
-public class TestFixture implements MethodRule {
+public class TestFixture implements TestRule {
 
     /**
      * {@inheritDoc}
@@ -26,8 +24,8 @@ public class TestFixture implements MethodRule {
      *      java.lang.Object)
      */
     @Override
-    public final Statement apply(final Statement base, final FrameworkMethod method, final Object target) {
-        inspect(target, method.getMethod());
+    public final Statement apply(final Statement base, final Description description) {
+        inspect(description);
         return new Statement() {
             @Override
             public void evaluate() throws Throwable {
@@ -44,12 +42,9 @@ public class TestFixture implements MethodRule {
     /**
      * Override to perform any reflection/introspection on the target test instance before setUp() / tearDown().
      *
-     * @param target
-     *        the target (test) object
-     * @param method
-     *        the target test method
+     * @param description the {@link Description}
      */
-    protected void inspect(final Object target, final Method method) {
+    protected void inspect(final Description description) {
     }
 
     /**

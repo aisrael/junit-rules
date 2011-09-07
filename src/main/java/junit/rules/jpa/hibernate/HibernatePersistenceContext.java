@@ -24,6 +24,7 @@ import javax.persistence.PersistenceContext;
 
 import junit.rules.TestFixture;
 import junit.rules.dbunit.Fixtures;
+import junit.rules.util.Reflection;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
@@ -32,6 +33,7 @@ import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.hibernate.ejb.Ejb3Configuration;
+import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -96,14 +98,15 @@ public class HibernatePersistenceContext extends TestFixture implements junit.ru
     /**
      * {@inheritDoc}
      *
-     * @see junit.rules.TestFixture#inspect(java.lang.Object, java.lang.reflect.Method)
+     * @see junit.rules.TestFixture#inspect(org.junit.runner.Description)
      */
     @Override
-    protected final void inspect(final Object target, final Method method) {
-        final Class<? extends Object> targetClass = target.getClass();
-        if (targetClass.isAnnotationPresent(Fixtures.class)) {
-            addFixturesFromAnnotation(targetClass.getAnnotation(Fixtures.class));
+    protected final void inspect(final Description description) {
+        final Class<? extends Object> testClass = description.getTestClass();
+        if (testClass.isAnnotationPresent(Fixtures.class)) {
+            addFixturesFromAnnotation(testClass.getAnnotation(Fixtures.class));
         }
+        final Method method = Reflection.quietlyGetMethod(testClass, description.getMethodName());
         if (method.isAnnotationPresent(Fixtures.class)) {
             addFixturesFromAnnotation(method.getAnnotation(Fixtures.class));
         }
