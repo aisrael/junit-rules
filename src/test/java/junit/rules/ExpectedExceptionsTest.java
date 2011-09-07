@@ -3,6 +3,7 @@
  */
 package junit.rules;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Rule;
@@ -22,8 +23,13 @@ public class ExpectedExceptionsTest {
     public void testExpectedExceptions() {
         final Result result = JUnitCore.runClasses(UsesExpectedExceptions.class);
         final int failureCount = result.getFailureCount();
-        if (failureCount != 0) {
-            System.out.println("Encountered " + failureCount + " failures");
+        if (failureCount == 1) {
+            final Failure failure = result.getFailures().get(0);
+            final Throwable e = failure.getException();
+            assertNotNull(e);
+            assertTrue(e instanceof ArrayIndexOutOfBoundsException);
+        } else {
+            System.out.println("Encountered " + failureCount + " failures, expecting only 1");
             for (final Failure failure : result.getFailures()) {
                 System.out.println(failure);
                 final Throwable e = failure.getException();
@@ -51,18 +57,31 @@ public class ExpectedExceptionsTest {
             assertTrue("Should be true", true);
         }
 
+        /**
+         * This test should fail, since we're saying we expect a {@link NullPointerException} but the code throws an
+         * {@link ArrayIndexOutOfBoundsException}.
+         */
         @Test
         @Throws(NullPointerException.class)
         public void throwsArrayIndexOutOfBounds() {
             final int[] a = {};
+            @SuppressWarnings("unused")
             final int i = a[1];
         }
 
         @Test
         @Throws(NullPointerException.class)
+        @SuppressWarnings("null")
         public void throwsNullPointerException() {
             final String s = null;
             s.length();
-        }}
+        }
+
+        @Test
+        @Throws(value = IllegalArgumentException.class, message = "x should be non-negative!")
+        public void throwsIllegalArgumentException() {
+            throw new IllegalArgumentException("x should be non-negative");
+        }
+    }
 
 }
