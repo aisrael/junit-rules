@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  *
  * @author Alistair A. Israel
  */
+@SuppressWarnings("deprecation")
 public class Weld implements MethodRule {
 
     private static final Logger logger = LoggerFactory.getLogger(Weld.class);
