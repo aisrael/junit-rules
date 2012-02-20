@@ -8,6 +8,8 @@
  */
 package junit.rules.dbunit;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +61,7 @@ public final class DbUnitUtil {
         IDataSet dataSet = null;
 
         try {
-            final InputStream in = ClassLoader.getSystemResourceAsStream(fixtureName);
+            final InputStream in = new FileInputStream(getFile(fixtureName));
             try {
                 if (in != null) {
                     if (fixtureName.endsWith(".xml")) {
@@ -70,9 +72,18 @@ public final class DbUnitUtil {
                 in.close();
             }
         } catch (final Exception e) {
-            LOGGER.warn(e.getMessage(), e);
+            throw new Error(e.getMessage(), e);
         }
         return dataSet;
+    }
+
+    /**
+     * @param fixtureName
+     *        the fixture (file) name
+     * @return the {@link File} with the prefix
+     */
+    public static File getFile(final String fixtureName) {
+        return new File("src/test/db/fixtures", fixtureName);
     }
 
 }

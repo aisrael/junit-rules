@@ -18,6 +18,9 @@ import junit.rules.util.Reflection;
 
 import org.apache.derby.jdbc.EmbeddedDriver;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.CompositeDataSet;
+import org.dbunit.dataset.DataSetException;
+import org.dbunit.dataset.IDataSet;
 import org.junit.runner.Description;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +34,22 @@ public class DbUnitTestFixtures extends TestFixture {
 
     private List<String> fixtureNames;
 
-    private JdbcDatabaseTester jdbcDatabaseTester;
+    private JdbcDatabaseTester tester;
+
+    /**
+     * Default constructor. Will use a hard-coded Derby 'test' database.
+     */
+    public DbUnitTestFixtures() {
+        // noop
+    }
+
+    /**
+     * @param jdbcDatabaseTester
+     *        the {@link JdbcDatabaseTester} to use
+     */
+    public DbUnitTestFixtures(final JdbcDatabaseTester jdbcDatabaseTester) {
+        this.tester = jdbcDatabaseTester;
+    }
 
     /**
      * {@inheritDoc}
@@ -52,14 +70,22 @@ public class DbUnitTestFixtures extends TestFixture {
      */
     @Override
     protected final void setUp() throws Throwable {
-        jdbcDatabaseTester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), "jdbc:derby:test");
+        if (tester == null) {
+            tester = new JdbcDatabaseTester(EmbeddedDriver.class.getName(), "jdbc:derby:test");
+        }
         if (fixtureNames.isEmpty()) {
             logger.warn("No fixtures to load! Specify fixtures using @Fixtures.");
         } else {
-            DbUnitUtil.loadDataSets(fixtureNames);
+            try {
+                final IDataSet[] dataSets = DbUnitUtil.loadDataSets(fixtureNames);
+                final CompositeDataSet compositeDataSet = new CompositeDataSet(dataSets);
+                tester.setDataSet(compositeDataSet);
+            } catch (final DataSetException e) {
+                throw new Error(e.getMessage(), e);
+            }
         }
 
-        jdbcDatabaseTester.onSetup();
+        tester.onSetup();
     }
 
     /**
@@ -69,7 +95,7 @@ public class DbUnitTestFixtures extends TestFixture {
      */
     @Override
     protected final void tearDown() throws Throwable {
-        jdbcDatabaseTester.onTearDown();
+        tester.onTearDown();
     }
 
 }
