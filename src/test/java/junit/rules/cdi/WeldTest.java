@@ -86,7 +86,7 @@ public final class WeldTest {
     /**
      * The interface Dependency.
      */
-    public static interface Dependency {
+    public interface Dependency {
 
     }
 
